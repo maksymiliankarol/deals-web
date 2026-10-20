@@ -1,0 +1,66 @@
+@import "@fontsource-variable/lexend";
+@import "@fontsource/momo-trust-display";
+@import "tailwindcss";
+
+:root {
+  color-scheme: light;
+
+  /* Neutrals: light to dark */
+  --white:    #ffffff;
+  --offwhite: #f3f0e7;
+  --pink:     #a49999;
+  --grey:     #8a8680;
+  --sage:     #70756c;
+  --offblack: #1c1d1b;
+  --black:    #000000;
+
+  /* Accents: warm to cool */
+  --red:      #c9322b;
+  --gold:     #c89722;
+  --yellow:   #e8c11b;
+  --green:    #2f7a4a;
+  --blue:     #213a79;
+  --navy:     #212732;
+
+  /* App states */
+  --error:    #d00000;
+}
+
+@theme inline {
+  --font-sans: "Lexend Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "Momo Trust Display", sans-serif;
+
+  /* Semantic */
+  --color-background: var(--offwhite);
+  --color-foreground: var(--offblack);
+
+  /* Neutrals */
+  --color-white:      var(--white);
+  --color-offwhite:   var(--offwhite);
+  --color-pink:       var(--pink);
+  --color-grey:       var(--grey);
+  --color-sage:       var(--sage);
+  --color-offblack:   var(--offblack);
+  --color-black:      var(--black);
+
+  /* Accents */
+  --color-red:        var(--red);
+  --color-gold:       var(--gold);
+  --color-yellow:     var(--yellow);
+  --color-green:      var(--green);
+  --color-blue:       var(--blue);
+  --color-navy:       var(--navy);
+
+  /* States */
+  --color-error:      var(--error);
+}
+@layer base {
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--black);
+    outline-offset: 2px;
+  }
+}
