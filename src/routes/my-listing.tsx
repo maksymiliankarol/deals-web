@@ -7,6 +7,7 @@ import type { BuyMatch } from "../types"
 import { ChildLayout } from "../layouts/child-layout"
 import Dialog from "../components/dialog"
 import BuyCard from "../components/buy-card"
+import Turnstile from "../components/turnstile"
 
 const dateFormat = new Intl.DateTimeFormat(undefined, { dateStyle: "medium" })
 
@@ -25,6 +26,8 @@ export function MyListing() {
   const [unlockTarget, setUnlockTarget] = useState<BuyMatch | null>(null)
   const [unlockPending, setUnlockPending] = useState(false)
   const [unlockError, setUnlockError] = useState<string | null>(null)
+  const [unlockToken, setUnlockToken] = useState<string | null>(null)
+  const [unlockResetKey, setUnlockResetKey] = useState(0)
 
   // Coming back from Stripe with the Back button can restore this page from the
   // browser cache with "pending" still on, so reset it.
@@ -56,13 +59,13 @@ export function MyListing() {
   }
 
   async function handleUnlock() {
-    if (!listing || !unlockTarget) return
+    if (!listing || !unlockTarget || !unlockToken) return
 
     setUnlockPending(true)
     setUnlockError(null)
 
     try {
-      const { url } = await startUnlock(unlockTarget.id, listing.id)
+    const { url } = await startUnlock(unlockTarget.id, listing.id, unlockToken)
       // Leave "pending" on: the browser is about to leave for Stripe.
       window.location.assign(url)
     } catch (err) {
@@ -73,9 +76,13 @@ export function MyListing() {
         setUnlockTarget(null)
         setError("That demand is no longer available.")
       } else {
-        setUnlockError("Could not start checkout. Please try again.")
+        setUnlockError(
+          err instanceof ApiError ? err.message : "Could not start checkout. Please try again."
+        )
       }
       setUnlockPending(false)
+      setUnlockTarget(null)
+      setUnlockResetKey((k) => k + 1)
     }
   }
 
@@ -163,6 +170,7 @@ export function MyListing() {
               confirmLabel={
                 unlockTarget ? `Pay ${formatUsd(unlockTarget.price_cents)}` : "Pay"
               }
+              confirmDisabled={!unlockToken}
               pending={unlockPending}
               onConfirm={handleUnlock}
               onClose={() => setUnlockTarget(null)}
@@ -171,6 +179,7 @@ export function MyListing() {
                 You'll pay on Stripe's secure page and get this buyer's email and
                 phone. Nobody else will be able to unlock this demand.
               </p>
+              {unlockTarget && <Turnstile onToken={setUnlockToken} resetKey={unlockResetKey} />}
               {unlockError && <p role="alert" className="text-error">{unlockError}</p>}
 
             </Dialog>

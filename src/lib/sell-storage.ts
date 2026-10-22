@@ -1,3 +1,5 @@
+import { isRecord, isValidDate, readList } from './storage'
+
 export type SellListing = {
   id: string
   description: string
@@ -6,15 +8,14 @@ export type SellListing = {
 
 const KEY = 'sell-listings'
 
-export function getSellListings(): SellListing[] {
-  try {
-    const raw = localStorage.getItem(KEY)
-    const parsed: unknown = raw ? JSON.parse(raw) : []
-    return Array.isArray(parsed) ? (parsed as SellListing[]) : []
-  } catch {
-    return []
-  }
-}
+// Only what the pages need: a wrong type here would crash them.
+const isSellListing = (value: unknown): value is SellListing =>
+  isRecord(value) &&
+  typeof value.id === 'string' &&
+  typeof value.description === 'string' &&
+  isValidDate(value.createdAt)
+
+export const getSellListings = () => readList(KEY, isSellListing)
 
 export function getSellListing(id: string): SellListing | undefined {
   return getSellListings().find((listing) => listing.id === id)

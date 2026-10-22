@@ -6,6 +6,7 @@ interface DialogProps {
   title: string
   children?: ReactNode
   confirmLabel: string
+  confirmDisabled?: boolean
   cancelLabel?: string
   variant?: "default" | "danger"
   pending?: boolean
@@ -23,6 +24,7 @@ const Dialog = ({
   title,
   children,
   confirmLabel,
+  confirmDisabled,
   cancelLabel = "Cancel",
   variant = "default",
   pending = false,
@@ -69,7 +71,7 @@ const Dialog = ({
           <button
             type="button"
             onClick={onClose}
-            disabled={pending}
+            disabled={pending || confirmDisabled}
             className="bg-white px-4 py-2 border-2 border-black cursor-pointer hover:brightness-75 disabled:opacity-50"
           >
             {cancelLabel}
@@ -77,7 +79,7 @@ const Dialog = ({
           <button
             type="button"
             onClick={onConfirm}
-            disabled={pending}
+            disabled={pending || confirmDisabled}
             className={`${CONFIRM_STYLES[variant]} px-4 py-2 border-2 border-black cursor-pointer hover:brightness-75 disabled:opacity-50`}
           >
             {confirmLabel}

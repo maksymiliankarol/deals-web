@@ -15,10 +15,10 @@ type State =
 function errorMessage(err: unknown) {
   if (err instanceof ApiError) {
     if (err.status === 404) return "We couldn't find this payment."
-    if (err.status === 402) {
-      return "Your payment hasn't been confirmed yet. Try again in a moment."
-    }
+    if (err.status === 402) return "Your payment hasn't been confirmed yet. Try again in a moment."
+    if (err.status === 410) return "These details are no longer available."
     if (err.status === 502) return "Couldn't reach the payment provider. Try again."
+    return err.message
   }
   return "Something went wrong."
 }

@@ -6,6 +6,7 @@ import { validateDescription, validateEmail, validatePhone } from '../lib/valida
 import { TIER_BUDGETS } from '../utils/pricing'
 import { ChildLayout } from '../layouts/child-layout'
 import type { BuyPostedState } from '../types'
+import Turnstile from '../components/turnstile'
 
 const TIERS = [0, 1, 2, 3]
 const LAST_STEP = 2
@@ -22,6 +23,8 @@ export function Buy() {
   const [errors, setErrors] = useState<Errors>({})
   const [pending, setPending] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [token, setToken] = useState<string | null>(null)
+  const [resetKey, setResetKey] = useState(0) 
 
   function clearError(field: keyof Errors) {
     setErrors((prev) => ({ ...prev, [field]: undefined }))
@@ -59,15 +62,19 @@ export function Buy() {
       return
     }
 
-    setPending(true)
+    if (!token) {
+      setError('Please wait for the verification to finish')
+      return
+    }
 
+    setPending(true)
     try {
       const { id } = await createBuy({
         description: description.trim(),
         tier,
         email: email.trim(),
         phone: phone.trim()
-      })
+      }, token)
       navigate("/buy/posted", {
         replace: true,
         state: { id, email, phone } satisfies BuyPostedState
@@ -81,6 +88,9 @@ export function Buy() {
       }
     } finally {
       setPending(false)
+      // A token works once, whatever the outcome (including the 422 contact check)
+      setToken(null)
+      setResetKey((k) => k + 1)
     }
   }
 
@@ -193,6 +203,8 @@ export function Buy() {
           </div>
         )}
 
+        {step === 2 && <Turnstile onToken={setToken} resetKey={resetKey} />}
+
         <div className="flex gap-2">
           {step > 0 && (
             <button
@@ -206,7 +218,7 @@ export function Buy() {
           )}
           <button
             type="submit"
-            disabled={pending}
+            disabled={pending || (step === LAST_STEP && !token)}
             className="bg-yellow text-black border-2 border-black px-4 py-2 cursor-pointer hover:brightness-75 disabled:opacity-50"
           >
             {step < LAST_STEP
