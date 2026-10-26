@@ -12,6 +12,8 @@ import { HowItWorks } from "./routes/how-it-works";
 import { UnlockSuccess } from "./routes/unlock-success";
 import { Unlocked } from "./routes/unlocked";
 import { BuyPosted } from "./routes/buy-posted";
+import { TermsOfService } from "./routes/terms-of-service";
+import { PrivacyPolicy } from "./routes/privacy-policy";
 
 export const router = createBrowserRouter([
   {
@@ -31,6 +33,8 @@ export const router = createBrowserRouter([
           { path: "unlocked", element: <Unlocked /> },
           { path: "contact", element: <Contact /> },
           { path: "how-it-works", element: <HowItWorks /> },
+          { path: "terms-of-service", element: <TermsOfService /> },
+          { path: "privacy-policy", element: <PrivacyPolicy /> },
           { path: "*", element: <NotFound /> }
         ]
       }

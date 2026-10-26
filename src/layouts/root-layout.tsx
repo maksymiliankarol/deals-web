@@ -5,7 +5,7 @@ export function RootLayout() {
     <div className='flex h-dvh w-full flex-col'>
       <nav className='shrink-0 px-4 h-12 flex items-center bg-transparent border-b-2'>
         <NavLink to="/" end className='text-xl font-heading hover:opacity-75'>
-          Metalogrom Deals
+          MetaloDeals
         </NavLink>
       </nav>
 

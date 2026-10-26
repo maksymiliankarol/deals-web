@@ -13,11 +13,10 @@ dist-ssr
 *.local
 
 # Env
-.env
+.env.local
 
 # Dev
 TODO.md
-DEV.md
 
 # Editor directories and files
 .vscode/*

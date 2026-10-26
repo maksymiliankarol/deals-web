@@ -71,7 +71,7 @@ const Dialog = ({
           <button
             type="button"
             onClick={onClose}
-            disabled={pending || confirmDisabled}
+            disabled={pending}
             className="bg-white px-4 py-2 border-2 border-black cursor-pointer hover:brightness-75 disabled:opacity-50"
           >
             {cancelLabel}

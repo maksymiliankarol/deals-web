@@ -108,7 +108,7 @@ export function Buy() {
       >
         {step === 0 && (
           <div className="flex flex-col gap-2">
-            <label className='font-bold'>Description</label>
+            <label htmlFor="description" className='font-bold'>Description</label>
             <textarea
               value={description}
               onChange={(e) => {
@@ -163,7 +163,7 @@ export function Buy() {
         {step === 2 && (
           <div className='grid md:grid-cols-2 gap-2'>
             <div className="flex flex-col gap-2">
-              <label className='font-bold'>Email</label>
+              <label htmlFor="email" className='font-bold'>Email</label>
               <input
                 type="email"
                 value={email}
@@ -183,7 +183,7 @@ export function Buy() {
             </div>
 
             <div className="flex flex-col gap-2">
-              <label className='font-bold'>Phone</label>
+              <label htmlFor="phone" className='font-bold'>Phone</label>
               <input
                 type="tel"
                 value={phone}

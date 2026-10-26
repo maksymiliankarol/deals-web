@@ -1,15 +1,13 @@
 import { useEffect, useMemo, useState } from "react"
-import { useNavigate, useParams } from "react-router"
+import { Link, useNavigate, useParams } from "react-router"
 import { deleteSellListing, getSellListing } from "../lib/sell-storage"
 import { ApiError, searchBuys, startUnlock } from "../lib/api"
-import { formatUsd } from "../utils/format"
+import { dateFormat, formatUsd } from "../utils/format"
 import type { BuyMatch } from "../types"
 import { ChildLayout } from "../layouts/child-layout"
 import Dialog from "../components/dialog"
 import BuyCard from "../components/buy-card"
 import Turnstile from "../components/turnstile"
-
-const dateFormat = new Intl.DateTimeFormat(undefined, { dateStyle: "medium" })
 
 export function MyListing() {
   const { id } = useParams()
@@ -19,6 +17,9 @@ export function MyListing() {
   const [matches, setMatches] = useState<BuyMatch[] | null>(null)
   const [pending, setPending] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  const [searchToken, setSearchToken] = useState<string | null>(null)
+  const [searchResetKey, setSearchResetKey] = useState(0)
 
   const [confirmOpen, setConfirmOpen] = useState(false)
   const [deleteError, setDeleteError] = useState<string | null>(null)
@@ -43,18 +44,21 @@ export function MyListing() {
   
   
   async function handleSearch() {
-    if (!listing) return
+    if (!listing || !searchToken) return
 
     setPending(true)
     setError(null)
 
     try {
-      const result = await searchBuys(listing.description)
+      const result = await searchBuys(listing.description, searchToken)
       setMatches(result.matches)
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong")
     } finally {
       setPending(false)
+      // A token works once, whatever the outcome
+      setSearchToken(null)
+      setSearchResetKey((k) => k + 1)
     }
   }
 
@@ -106,7 +110,7 @@ export function MyListing() {
           This listing wasn't found in your browser storage. It may have been cleared.
         </p>
       ) : (
-        <div className="grid grid-cols-2 gap-8">
+        <div className="grid md:grid-cols-2 gap-8">
           <div className="flex flex-col gap-4">
             <p>{listing.description}</p>
             <p>Created: {dateFormat.format(new Date(listing.createdAt))}</p>
@@ -135,14 +139,17 @@ export function MyListing() {
 
           <div className="flex flex-col gap-4">
             {!matches && (
-              <button
-                type="button"
-                onClick={handleSearch}
-                disabled={pending}
-                className="bg-green text-white px-4 py-2 border-2 border-black cursor-pointer hover:brightness-75 disabled:opacity-50"
-              >
-                {pending ? "Searching…" : "Find Matching Demand"}
-              </button>
+              <>
+                <Turnstile onToken={setSearchToken} resetKey={searchResetKey} />
+                <button
+                  type="button"
+                  onClick={handleSearch}
+                  disabled={pending || !searchToken}
+                  className="bg-green text-white px-4 py-2 border-2 border-black cursor-pointer hover:brightness-75 disabled:opacity-50"
+                >
+                  {pending ? "Searching…" : "Find Matching Demand"}
+                </button>
+              </>
             )}
 
             {error && <p role="alert" className="text-error">{error}</p>}
@@ -178,6 +185,11 @@ export function MyListing() {
               <p>
                 You'll pay on Stripe's secure page and get this buyer's email and
                 phone. Nobody else will be able to unlock this demand.
+              </p>
+              <p>
+                By paying you accept the <Link to="/terms" className="underline hover:decoration-2">Terms</Link>. The
+                details are delivered immediately and unlocks are final, except where they weren't
+                delivered or are provably unusable. Save them straight away.
               </p>
               {unlockTarget && <Turnstile onToken={setUnlockToken} resetKey={unlockResetKey} />}
               {unlockError && <p role="alert" className="text-error">{unlockError}</p>}

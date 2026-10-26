@@ -54,6 +54,10 @@ export function Sell() {
           {descriptionError && (
             <p id="description-error" className="text-error">{descriptionError}</p>
           )}
+          <p>
+            Your listing is saved only in this browser, not on our servers. If you clear your
+            browser data or switch device, it's gone. Nothing is shown to buyers.
+          </p>
         </div>
 
         <div className="flex gap-2">

@@ -1,12 +1,12 @@
 import { Link } from "react-router"
 import { useState } from "react"
 import { getSellListings } from "../lib/sell-storage"
+import { dateFormat } from "../utils/format"
 import { ChildLayout } from "../layouts/child-layout"
 import SellCard from "../components/sell-card"
-import { dateFormat } from "../utils/format"
 
 export function MyListings() {
-  // Read once on mount; the route remounts on everu visit, so it's always fresh.
+  // Read once on mount; the route remounts on every visit, so it's always fresh.
   const [listings] = useState(getSellListings)
 
   return (

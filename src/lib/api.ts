@@ -1,9 +1,9 @@
 import type { Buy, BuyMatch, UnlockedDetails } from "../types"
 
 const API_URL: string = import.meta.env.VITE_API_URL
-// The production build is checked in vite.config.ts; this covers a missing .env in dev.
+// Fails at startup if the variable is missing (.env.local in dev, .env.production in builds).
 if (!API_URL) throw new Error("VITE_API_URL is not set")
-
+  
 // The slowest call is posting a buy (Turnstile check + AI check + insert).
 const TIMEOUT_MS = 20_000
 
@@ -90,8 +90,8 @@ const isStripeCheckoutUrl = (value: string) => {
 export const createBuy = (input: Buy, token: string) =>
   post<{ id: number }>("/api/buy", input, { [TURNSTILE_HEADER]: token })
 
-export const searchBuys = (description: string) =>
-  post<{ matches: BuyMatch[] }>("/api/search", { description })
+export const searchBuys = (description: string, token: string) =>
+  post<{ matches: BuyMatch[] }>("/api/search", { description }, { [TURNSTILE_HEADER]: token })
 
 export async function startUnlock(buyId: number, listingId: string, token: string) {
   const { url } = await post<{ url: string }>(

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { dateFormat, formatUsd, parseDbDate } from "../utils/format";
 import { truncate } from "../utils/truncate";
+import { TIER_BUDGETS } from "../utils/pricing";
 import type { BuyMatch } from "../types";
 
 const PREVIEW_LENGTH = 200;
@@ -37,7 +38,7 @@ const BuyCard = ({ match, onClick }: BuyCardProps) => {
         )}
       </div>
       <p>
-        Tier {match.tier} · Created:{" "}
+        Budget: {TIER_BUDGETS[match.tier] ?? "Not specified"} · Created:{" "}
         {dateFormat.format(parseDbDate(match.created_at))}
       </p>
       <p>Score: {match.score.toFixed(2)}</p>
