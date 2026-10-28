@@ -140,14 +140,20 @@ export function MyListing() {
           <div className="flex flex-col gap-4">
             {!matches && (
               <>
-                <Turnstile onToken={setSearchToken} resetKey={searchResetKey} />
+                <div className="fixed right-4 bottom-4 z-50">
+                  <Turnstile onToken={setSearchToken} resetKey={searchResetKey} />
+                </div>
                 <button
                   type="button"
                   onClick={handleSearch}
                   disabled={pending || !searchToken}
                   className="bg-green text-white px-4 py-2 border-2 border-black cursor-pointer hover:brightness-75 disabled:opacity-50"
                 >
-                  {pending ? "Searching…" : "Find Matching Demand"}
+                  {pending
+                    ? "Searching…"
+                    : !searchToken
+                      ? "Verifying…"
+                      : "Find Matching Demand"}
                 </button>
               </>
             )}
@@ -175,7 +181,11 @@ export function MyListing() {
               open={unlockTarget !== null}
               title="Unlock contact details?"
               confirmLabel={
-                unlockTarget ? `Pay ${formatUsd(unlockTarget.price_cents)}` : "Pay"
+                unlockTarget
+                  ? unlockToken
+                    ? `Pay ${formatUsd(unlockTarget.price_cents)}`
+                    : "Verifying…"
+                  : "Pay"
               }
               confirmDisabled={!unlockToken}
               pending={unlockPending}
@@ -191,9 +201,9 @@ export function MyListing() {
                 details are delivered immediately and unlocks are final, except where they weren't
                 delivered or are provably unusable. Save them straight away.
               </p>
+              
               {unlockTarget && <Turnstile onToken={setUnlockToken} resetKey={unlockResetKey} />}
               {unlockError && <p role="alert" className="text-error">{unlockError}</p>}
-
             </Dialog>
           </div>
         </div>

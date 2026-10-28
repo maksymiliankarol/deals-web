@@ -3,9 +3,17 @@ import { NavLink, Outlet } from 'react-router'
 export function RootLayout() {
   return (
     <div className='flex h-dvh w-full flex-col'>
-      <nav className='shrink-0 px-4 h-12 flex items-center bg-transparent border-b-2'>
-        <NavLink to="/" end className='text-xl font-heading hover:opacity-75'>
-          MetaloDeals
+      <nav className='shrink-0 px-4 h-12 flex items-center gap-2 bg-transparent border-b-2 text-xl font-heading'>
+        <a
+          href="https://metalogrom.com"
+          aria-label="Metalogrom"
+          className='hover:opacity-75'
+        >
+          M
+        </a>
+        <span aria-hidden="true" className='size-1.5 rounded-full bg-yellow' />
+        <NavLink to="/" end className='hover:opacity-75'>
+          Deals
         </NavLink>
       </nav>
 

@@ -9,7 +9,7 @@ export function PrivacyPolicy() {
     <ChildLayout size="sm">
       <h1 className={h1ClassName}>Privacy Policy</h1>
       <p>
-        Last updated: [date]. Controller: [operator name, address, country], contact:
+        Last updated: 27/11/2026. Controller: metalogrom.com, contact:
         deals@metalogrom.com.
       </p>
 

@@ -203,7 +203,11 @@ export function Buy() {
           </div>
         )}
 
-        {step === 2 && <Turnstile onToken={setToken} resetKey={resetKey} />}
+        {step === 2 && (
+          <div className="fixed right-4 bottom-4 z-50">
+            <Turnstile onToken={setToken} resetKey={resetKey} />
+          </div>
+        )}
 
         <div className="flex gap-2">
           {step > 0 && (
@@ -225,7 +229,9 @@ export function Buy() {
               ? `Next Step (${step + 1}/${LAST_STEP + 1})`
               : pending
                 ? 'Posting…'
-                : 'Post'}
+                : !token
+                  ? 'Verifying…'
+                  : 'Post'}
           </button>
         </div>
 

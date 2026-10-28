@@ -9,7 +9,7 @@ export function TermsOfService() {
     <ChildLayout size="sm">
       <h1 className={h1ClassName}>Terms of Service</h1>
       <p>
-        Last updated: [date]. Deals is operated by [operator name, address, country] ("we").
+        Last updated: 27/11/2026. Deals is operated by metalogrom.com ("we").
         By using it you accept these terms.
       </p>
 
@@ -83,7 +83,7 @@ export function TermsOfService() {
       <h2 className={h2ClassName}>Changes and law</h2>
       <p>
         We may update these terms; continuing to use Deals means you accept the new version.
-        These terms are governed by the law of [country], subject to mandatory consumer
+        These terms are governed by the law of Poland, subject to mandatory consumer
         protections where you live.
       </p>
     </ChildLayout>
