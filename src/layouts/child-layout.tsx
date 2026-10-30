@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import ArrowBack from "../assets/arrow-back.svg?react";
+import { useI18n } from "../lib/i18n-context";
 
 type Size = "sm" | "md" | "lg" | "xl";
 
@@ -16,6 +17,8 @@ interface ChildLayoutProps {
 }
 
 export function ChildLayout({ children, size = "md" }: ChildLayoutProps) {
+  const { t } = useI18n()
+
   return (
     <div className={`${sizeClasses[size]} flex flex-col gap-4 mx-auto`}>
       <nav>
@@ -24,7 +27,7 @@ export function ChildLayout({ children, size = "md" }: ChildLayoutProps) {
           className="flex items-center gap-2 hover:underline"
         >
           <ArrowBack />
-          <span>Back</span>
+          <span>{t.common.back}</span>
         </Link>
       </nav>
       {children}
