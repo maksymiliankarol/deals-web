@@ -1,15 +1,18 @@
 import type { jsPDF } from 'jspdf'
 import { buildDealRecord } from './deal-record'
+import type { Lang } from './locale'
+import type { Messages } from '../locales/en'
 import type { UnlockedDetails } from '../types'
+import { PDF_FONT, registerPdfFonts } from './pdf-font'
 
-const FONT = 'helvetica'
 const MARGIN = 20
 const TEXT_WIDTH = 210 - MARGIN * 2 // A4 is 210mm wide
 
-// What jsPDF's built-in fonts can draw (the WinAnsi set): Latin-1 plus a few
-// common typographic characters. Anything else would come out as garbage.
+// What the bundled font can draw: Latin, Latin Extended-A/B, common punctuation, €, ™.
+// Keep in sync with the subset ranges in the font step. Cyrillic, CJK and emoji
+// would come out as empty boxes.
 const SUPPORTED =
-  /^[\n\r\t\u0020-\u007E\u00A0-\u00FF\u0152\u0153\u0160\u0161\u0178\u017D\u017E\u0192\u02C6\u02DC\u2013\u2014\u2018-\u201A\u201C-\u201E\u2020-\u2022\u2026\u2030\u2039\u203A\u20AC\u2122]*$/u
+  /^[\n\r\t\u0020-\u007E\u00A0-\u024F\u2010-\u2027\u2030-\u205E\u20AC\u2122]*$/u
 
 export const canRenderInPdf = (text: string) => SUPPORTED.test(text)
 
@@ -32,28 +35,29 @@ function breakWideWords(doc: jsPDF, text: string, maxWidth: number) {
   })
 }
 
-export async function downloadDealPdf(details: UnlockedDetails) {
+export async function downloadDealPdf(details: UnlockedDetails, t: Messages, lang: Lang) {
   // Loaded only when the button is pressed.
   const { jsPDF } = await import('jspdf')
 
-  const record = buildDealRecord(details)
+  const record = buildDealRecord(details, t, lang)
   const doc = new jsPDF({ unit: 'mm', format: 'a4' })
+  await registerPdfFonts(doc)
 
   let y = MARGIN + 6
 
-  doc.setFont(FONT, 'bold')
+  doc.setFont(PDF_FONT, 'bold')
   doc.setFontSize(20)
   doc.text(record.title, MARGIN, y)
   y += 14
 
   for (const field of record.fields) {
-    doc.setFont(FONT, 'bold')
+    doc.setFont(PDF_FONT, 'bold')
     doc.setFontSize(10)
     doc.text(field.label, MARGIN, y)
     y += 5
 
     // Set the body font before measuring: wrapping uses the current font.
-    doc.setFont(FONT, 'normal')
+    doc.setFont(PDF_FONT, 'normal')
     doc.setFontSize(12)
     const text = field.freeText
       ? breakWideWords(doc, field.value, TEXT_WIDTH)

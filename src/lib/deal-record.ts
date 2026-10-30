@@ -1,7 +1,8 @@
-import type { UnlockedDetails } from "../types"
-import { formatUsd } from "../utils/format"
-
-const dateFormat = new Intl.DateTimeFormat(undefined, { dateStyle: 'long' })
+import type { UnlockedDetails } from '../types'
+import type { Messages } from '../locales/en'
+import type { Lang } from './locale'
+import { formatDate, formatUsd } from './format'
+import { budgetLabel } from '../utils/pricing'
 
 export type DealField = {
   label: string
@@ -10,18 +11,23 @@ export type DealField = {
   freeText?: boolean
 }
 
-export function buildDealRecord(details: UnlockedDetails) {
+export function buildDealRecord(details: UnlockedDetails, t: Messages, lang: Lang) {
+  const r = t.dealRecord
+
   return {
-    title: 'Unlocked deal',
-    fileBase: `unlocked-deal-${details.purchased_at.slice(0, 10)}`,
+    title: r.title,
+    fileBase: `${r.fileBase}-${details.purchased_at.slice(0, 10)}`,
     fields: [
-      { label: 'Date', value: dateFormat.format(new Date(details.purchased_at)) },
-      { label: 'Description', value: details.description, freeText: true },
-      { label: 'Tier', value: String(details.tier) },
-      { label: 'Price paid', value: formatUsd(details.price_cents) },
-      { label: 'Email', value: details.email },
-      { label: 'Phone', value: details.phone }
+      { label: r.date, value: formatDate(details.purchased_at, lang, 'long') },
+      { label: r.description, value: details.description, freeText: true },
+      {
+        label: r.budget,
+        value: budgetLabel(t, lang, details.tier) ?? t.buyCard.budgetUnspecified,
+      },
+      { label: r.pricePaid, value: formatUsd(details.price_cents, lang) },
+      { label: t.common.email, value: details.email },
+      { label: t.common.phone, value: details.phone },
     ] satisfies DealField[],
-    note: 'A record of the contact details you unlocked. This is not a tax invoice.'
+    note: r.note,
   }
 }

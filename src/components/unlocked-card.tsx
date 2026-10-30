@@ -1,7 +1,8 @@
 import { useState } from "react"
-import Dialog from "../components/dialog"
+import Dialog from "./dialog"
 import { truncate } from "../utils/truncate"
-import { dateFormat, formatUsd } from "../utils/format"
+import { formatDate, formatUsd } from "../lib/format"
+import { useI18n } from "../lib/i18n-context"
 import { downloadDealPdf } from "../lib/deal-pdf"
 import { deleteUnlocked } from "../lib/unlocked-storage"
 import type { SavedUnlock } from "../lib/unlocked-storage"
@@ -14,6 +15,7 @@ interface UnlockedCardProps {
 }
 
 const UnlockedCard = ({ unlocked, onDeleted }: UnlockedCardProps) => {
+  const { t, lang } = useI18n()
   const [expanded, setExpanded] = useState(false)
   const [pending, setPending] = useState(false)
   const [confirmOpen, setConfirmOpen] = useState(false)
@@ -31,10 +33,10 @@ const UnlockedCard = ({ unlocked, onDeleted }: UnlockedCardProps) => {
     setError(null)
 
     try {
-      await downloadDealPdf(unlocked)
+      await downloadDealPdf(unlocked, t, lang)
     } catch (err) {
       console.error(err)
-      setError("Could not create the PDF. Please try again.")
+      setError(t.pdf.failed)
     } finally {
       setPending(false)
     }
@@ -47,7 +49,7 @@ const UnlockedCard = ({ unlocked, onDeleted }: UnlockedCardProps) => {
     } catch (err) {
       console.error(err)
       setConfirmOpen(false)
-      setError("Could not delete this item in this browser.")
+      setError(t.unlockedCard.deleteFailed)
     }
   }
 
@@ -62,22 +64,24 @@ const UnlockedCard = ({ unlocked, onDeleted }: UnlockedCardProps) => {
             aria-expanded={expanded}
             className="mt-1 cursor-pointer font-bold underline"
           >
-            {expanded ? "Show less" : "Read more..."}
+            {expanded ? t.common.showLess : t.common.readMore}
           </button>
         )}
       </div>
       <p>
-        Unlocked: {dateFormat.format(new Date(unlocked.purchased_at))} for{" "}
-        {formatUsd(unlocked.price_cents)}
+        {t.unlockedCard.unlockedOn(
+          formatDate(unlocked.purchased_at, lang),
+          formatUsd(unlocked.price_cents, lang),
+        )}
       </p>
       <p>
-        Email:{" "}
+        {t.common.email}:{" "}
         <a href={`mailto:${unlocked.email}`} className="underline">
           {unlocked.email}
         </a>
       </p>
       <p>
-        Phone:{" "}
+        {t.common.phone}:{" "}
         <a href={`tel:${unlocked.phone}`} className="underline">
           {unlocked.phone}
         </a>
@@ -89,7 +93,7 @@ const UnlockedCard = ({ unlocked, onDeleted }: UnlockedCardProps) => {
           disabled={pending}
           className="px-4 py-2 border-2 border-black bg-green text-white cursor-pointer hover:brightness-75 disabled:opacity-50"
         >
-          {pending ? "Creating PDF…" : "Download PDF"}
+          {pending ? t.pdf.creating : t.pdf.download}
         </button>
         <button
           type="button"
@@ -97,23 +101,20 @@ const UnlockedCard = ({ unlocked, onDeleted }: UnlockedCardProps) => {
           disabled={pending}
           className="px-4 py-2 border-2 border-black bg-red text-white cursor-pointer hover:brightness-75 disabled:opacity-50"
         >
-          Delete
+          {t.common.delete}
         </button>
       </div>
       {error && <p role="alert" className="text-error">{error}</p>}
 
       <Dialog
         open={confirmOpen}
-        title="Delete this unlocked listing?"
-        confirmLabel="Delete"
+        title={t.unlockedCard.deleteTitle}
+        confirmLabel={t.common.delete}
         variant="danger"
         onConfirm={handleDelete}
         onClose={() => setConfirmOpen(false)}
       >
-        <p>
-          This removes it from this device. If you haven't saved the PDF or the
-          contact details elsewhere, you may not be able to get them back.
-        </p>
+        <p>{t.unlockedCard.deleteBody}</p>
       </Dialog>
     </div>
   )

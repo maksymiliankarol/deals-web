@@ -2,7 +2,9 @@ import { useEffect, useMemo, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router"
 import { deleteSellListing, getSellListing } from "../lib/sell-storage"
 import { ApiError, searchBuys, startUnlock } from "../lib/api"
-import { dateFormat, formatUsd } from "../utils/format"
+import { describeError } from "../lib/errors"
+import { formatDate, formatUsd } from "../lib/format"
+import { useI18n } from "../lib/i18n-context"
 import type { BuyMatch } from "../types"
 import { ChildLayout } from "../layouts/child-layout"
 import Dialog from "../components/dialog"
@@ -10,6 +12,7 @@ import BuyCard from "../components/buy-card"
 import Turnstile from "../components/turnstile"
 
 export function MyListing() {
+  const { t, lang } = useI18n()
   const { id } = useParams()
   const navigate = useNavigate()
   const listing = useMemo(() => (id ? getSellListing(id) : undefined), [id])
@@ -41,8 +44,7 @@ export function MyListing() {
     window.addEventListener("pageshow", reset)
     return () => window.removeEventListener("pageshow", reset)
   }, [])
-  
-  
+
   async function handleSearch() {
     if (!listing || !searchToken) return
 
@@ -53,7 +55,7 @@ export function MyListing() {
       const result = await searchBuys(listing.description, searchToken)
       setMatches(result.matches)
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong")
+      setError(describeError(t, err))
     } finally {
       setPending(false)
       // A token works once, whatever the outcome
@@ -69,7 +71,7 @@ export function MyListing() {
     setUnlockError(null)
 
     try {
-    const { url } = await startUnlock(unlockTarget.id, listing.id, unlockToken)
+      const { url } = await startUnlock(unlockTarget.id, listing.id, unlockToken)
       // Leave "pending" on: the browser is about to leave for Stripe.
       window.location.assign(url)
     } catch (err) {
@@ -77,12 +79,9 @@ export function MyListing() {
         // Taken by someone else, or a checkout for it is already open.
         const takenId = unlockTarget.id
         setMatches((prev) => prev?.filter((m) => m.id !== takenId) ?? null)
-        setUnlockTarget(null)
-        setError("That demand is no longer available.")
+        setError(describeError(t, err))
       } else {
-        setUnlockError(
-          err instanceof ApiError ? err.message : "Could not start checkout. Please try again."
-        )
+        setUnlockError(describeError(t, err, t.errors.checkout_failed))
       }
       setUnlockPending(false)
       setUnlockTarget(null)
@@ -99,21 +98,19 @@ export function MyListing() {
       navigate("/my-listings", { replace: true })
     } catch {
       setConfirmOpen(false)
-      setDeleteError("Could not delete the listing in this browser")
+      setDeleteError(t.myListing.deleteFailed)
     }
   }
-  
+
   return (
     <ChildLayout size="xl">
       {!listing ? (
-        <p>
-          This listing wasn't found in your browser storage. It may have been cleared.
-        </p>
+        <p>{t.myListing.notFound}</p>
       ) : (
         <div className="grid md:grid-cols-2 gap-8">
           <div className="flex flex-col gap-4">
             <p>{listing.description}</p>
-            <p>Created: {dateFormat.format(new Date(listing.createdAt))}</p>
+            <p>{t.myListing.created(formatDate(listing.createdAt, lang))}</p>
 
             <button
               type="button"
@@ -121,19 +118,19 @@ export function MyListing() {
               disabled={pending}
               className="bg-red text-white px-4 py-2 border-2 border-black cursor-pointer hover:brightness-75 disabled:opacity-50"
             >
-              Delete this listing
+              {t.myListing.delete}
             </button>
             {deleteError && <p role="alert" className="text-error">{deleteError}</p>}
 
             <Dialog
               open={confirmOpen}
-              title="Delete this listing?"
-              confirmLabel="Delete"
+              title={t.myListing.deleteTitle}
+              confirmLabel={t.common.delete}
               variant="danger"
               onConfirm={handleDelete}
               onClose={() => setConfirmOpen(false)}
             >
-              <p>This can't be undone.</p>
+              <p>{t.myListing.deleteBody}</p>
             </Dialog>
           </div>
 
@@ -150,26 +147,24 @@ export function MyListing() {
                   className="bg-green text-white px-4 py-2 border-2 border-black cursor-pointer hover:brightness-75 disabled:opacity-50"
                 >
                   {pending
-                    ? "Searching…"
+                    ? t.myListing.searching
                     : !searchToken
-                      ? "Verifying…"
-                      : "Find Matching Demand"}
+                      ? t.common.verifying
+                      : t.myListing.findMatches}
                 </button>
               </>
             )}
 
             {error && <p role="alert" className="text-error">{error}</p>}
 
-            {matches === null && !error && (
-              <p>Press the button to look for demand that matches this listing.</p>
-            )}
+            {matches === null && !error && <p>{t.myListing.hint}</p>}
 
-            {matches?.length === 0 && <p>No matching demand found.</p>}
+            {matches?.length === 0 && <p>{t.myListing.noMatches}</p>}
 
             {matches?.map((match) => (
-              <BuyCard 
-                key={match.id} 
-                match={match} 
+              <BuyCard
+                key={match.id}
+                match={match}
                 onClick={() => {
                   setUnlockError(null)
                   setUnlockTarget(match)
@@ -179,29 +174,28 @@ export function MyListing() {
 
             <Dialog
               open={unlockTarget !== null}
-              title="Unlock contact details?"
+              title={t.myListing.unlockTitle}
               confirmLabel={
                 unlockTarget
                   ? unlockToken
-                    ? `Pay ${formatUsd(unlockTarget.price_cents)}`
-                    : "Verifying…"
-                  : "Pay"
+                    ? t.myListing.pay(formatUsd(unlockTarget.price_cents, lang))
+                    : t.common.verifying
+                  : t.myListing.payFallback
               }
               confirmDisabled={!unlockToken}
               pending={unlockPending}
               onConfirm={handleUnlock}
               onClose={() => setUnlockTarget(null)}
             >
+              <p>{t.myListing.unlockIntro}</p>
               <p>
-                You'll pay on Stripe's secure page and get this buyer's email and
-                phone. Nobody else will be able to unlock this demand.
+                {t.myListing.termsBefore}
+                <Link to="/terms-of-service" className="underline hover:decoration-2">
+                  {t.myListing.termsLink}
+                </Link>
+                {t.myListing.termsAfter}
               </p>
-              <p>
-                By paying you accept the <Link to="/terms" className="underline hover:decoration-2">Terms</Link>. The
-                details are delivered immediately and unlocks are final, except where they weren't
-                delivered or are provably unusable. Save them straight away.
-              </p>
-              
+
               {unlockTarget && <Turnstile onToken={setUnlockToken} resetKey={unlockResetKey} />}
               {unlockError && <p role="alert" className="text-error">{unlockError}</p>}
             </Dialog>

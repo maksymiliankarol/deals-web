@@ -1,5 +1,6 @@
 import { useEffect, useId, useRef } from "react"
 import type { ReactNode } from "react"
+import { useI18n } from "../lib/i18n-context"
 
 interface DialogProps {
   open: boolean
@@ -25,12 +26,13 @@ const Dialog = ({
   children,
   confirmLabel,
   confirmDisabled,
-  cancelLabel = "Cancel",
+  cancelLabel,
   variant = "default",
   pending = false,
   onConfirm,
   onClose
 }: DialogProps) => {
+  const { t } = useI18n()
   const ref = useRef<HTMLDialogElement>(null)
   const titleId = useId()
 
@@ -74,7 +76,7 @@ const Dialog = ({
             disabled={pending}
             className="bg-white px-4 py-2 border-2 border-black cursor-pointer hover:brightness-75 disabled:opacity-50"
           >
-            {cancelLabel}
+            {cancelLabel ?? t.common.cancel}
           </button>
           <button
             type="button"

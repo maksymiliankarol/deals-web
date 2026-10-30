@@ -3,9 +3,11 @@ import { Link } from "react-router"
 import { ChildLayout } from "../layouts/child-layout"
 import Dialog from "../components/dialog"
 import UnlockedCard from "../components/unlocked-card"
+import { useI18n } from "../lib/i18n-context"
 import { RETENTION_DAYS, clearUnlocked, pruneUnlocked } from "../lib/unlocked-storage"
 
 export function Unlocked() {
+  const { t } = useI18n()
   // Read once on mount; the route remounts on every visit. This also removes
   // broken and expired entries from storage.
   const [listings, setListings] = useState(pruneUnlocked)
@@ -22,7 +24,7 @@ export function Unlocked() {
       setListings([])
     } catch (err) {
       console.error(err)
-      setError("Could not delete the items in this browser.")
+      setError(t.unlocked.deleteFailed)
     }
     setConfirmOpen(false)
   }
@@ -31,21 +33,20 @@ export function Unlocked() {
     <ChildLayout>
       {listings.length === 0 ? (
         <div className="flex flex-col gap-4">
-          <p>You haven't unlocked any listings yet.</p>
+          <p>{t.unlocked.empty}</p>
           <Link
             to="/my-listings"
             className="px-4 py-2 bg-blue w-fit text-white border-2 border-black hover:brightness-75"
           >
-            Unlock your first listing
+            {t.unlocked.unlockFirst}
           </Link>
         </div>
       ) : (
         <div className="flex flex-col gap-4">
           <div className="border-2 border-black bg-red p-4 text-white">
             <p>
-              <strong>Important:</strong> Items below are stored in your browser and
-              removed after {RETENTION_DAYS} days. Make sure you've downloaded the PDF
-              or saved the contact details for each one another way.
+              <strong>{t.unlocked.important}</strong>{" "}
+              {t.unlocked.retention(RETENTION_DAYS)}
             </p>
           </div>
           {listings.map((listing) => (
@@ -63,23 +64,19 @@ export function Unlocked() {
             }}
             className="self-start bg-red text-white px-4 py-2 border-2 border-black cursor-pointer hover:brightness-75"
           >
-            Delete all
+            {t.unlocked.deleteAll}
           </button>
           {error && <p role="alert" className="text-error">{error}</p>}
 
           <Dialog
             open={confirmOpen}
-            title="Delete all unlocked listings?"
-            confirmLabel="Delete all"
+            title={t.unlocked.clearTitle}
+            confirmLabel={t.unlocked.deleteAll}
             variant="danger"
             onConfirm={handleClearAll}
             onClose={() => setConfirmOpen(false)}
           >
-            <p>
-              This removes all {listings.length} items from this device. If you haven't
-              saved the PDFs or the contact details elsewhere, you may not be able to
-              get them back.
-            </p>
+            <p>{t.unlocked.clearBody(listings.length)}</p>
           </Dialog>
         </div>
       )}

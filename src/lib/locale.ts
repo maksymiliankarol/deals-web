@@ -9,7 +9,7 @@ export const LANGUAGE_NAMES: Record<Lang, string> = {
   pl: 'Polski',
 }
 
-const COOKIE = 'herds_lang'
+const COOKIE = 'deals_lang'
 const MAX_AGE = 60 * 60 * 24 * 365 // one year, in seconds
 
 const isLang = (value: unknown): value is Lang => LANGUAGES.includes(value as Lang)

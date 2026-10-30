@@ -2,18 +2,21 @@ import { useState } from 'react'
 import type { SubmitEvent } from 'react'
 import { useNavigate } from 'react-router'
 import { createBuy, ApiError } from '../lib/api'
+import { describeError } from '../lib/errors'
+import { useI18n } from '../lib/i18n-context'
 import { validateDescription, validateEmail, validatePhone } from '../lib/validation'
-import { TIER_BUDGETS } from '../utils/pricing'
+import { budgetLabel, TIERS } from '../utils/pricing'
 import { ChildLayout } from '../layouts/child-layout'
 import type { BuyPostedState } from '../types'
 import Turnstile from '../components/turnstile'
 
-const TIERS = [0, 1, 2, 3]
 const LAST_STEP = 2
 
+// Already translated text, ready to render
 type Errors = Partial<Record<'description' | 'email' | 'phone', string>>
 
 export function Buy() {
+  const { t, lang } = useI18n()
   const navigate = useNavigate()
   const [step, setStep] = useState(0)
   const [description, setDescription] = useState('')
@@ -24,7 +27,7 @@ export function Buy() {
   const [pending, setPending] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [token, setToken] = useState<string | null>(null)
-  const [resetKey, setResetKey] = useState(0) 
+  const [resetKey, setResetKey] = useState(0)
 
   function clearError(field: keyof Errors) {
     setErrors((prev) => ({ ...prev, [field]: undefined }))
@@ -35,15 +38,15 @@ export function Buy() {
     const found: Errors = {}
 
     if (step === 0) {
-      const msg = validateDescription(description)
-      if (msg) found.description = msg
+      const key = validateDescription(description)
+      if (key) found.description = t.validation[key]
     }
 
     if (step === 2) {
-      const emailMsg = validateEmail(email)
-      if (emailMsg) found.email = emailMsg
-      const phoneMsg = validatePhone(phone)
-      if (phoneMsg) found.phone = phoneMsg
+      const emailKey = validateEmail(email)
+      if (emailKey) found.email = t.validation[emailKey]
+      const phoneKey = validatePhone(phone)
+      if (phoneKey) found.phone = t.validation[phoneKey]
     }
 
     return found
@@ -63,7 +66,7 @@ export function Buy() {
     }
 
     if (!token) {
-      setError('Please wait for the verification to finish')
+      setError(t.buy.waitForVerification)
       return
     }
 
@@ -80,11 +83,11 @@ export function Buy() {
         state: { id, email, phone } satisfies BuyPostedState
       })
     } catch (err) {
-      if (err instanceof ApiError && err.field === 'description') {
-        setErrors({ description: err.message })
+      if (err instanceof ApiError && err.code === 'contact_info') {
+        setErrors({ description: describeError(t, err) })
         setStep(0)
       } else {
-        setError(err instanceof Error ? err.message : 'Something went wrong')
+        setError(describeError(t, err))
       }
     } finally {
       setPending(false)
@@ -108,8 +111,9 @@ export function Buy() {
       >
         {step === 0 && (
           <div className="flex flex-col gap-2">
-            <label htmlFor="description" className='font-bold'>Description</label>
+            <label htmlFor="description" className="font-bold">{t.buy.descriptionLabel}</label>
             <textarea
+              id="description"
               value={description}
               onChange={(e) => {
                 setDescription(e.target.value)
@@ -117,7 +121,7 @@ export function Buy() {
               }}
               maxLength={500}
               rows={10}
-              placeholder="What are you looking for?"
+              placeholder={t.buy.descriptionPlaceholder}
               autoFocus
               aria-invalid={!!errors.description}
               aria-describedby={errors.description ? 'description-error' : undefined}
@@ -126,34 +130,31 @@ export function Buy() {
             {errors.description ? (
               <p id="description-error" className="text-error">{errors.description}</p>
             ) : (
-              <p>
-                Don't include contact details here. You'll add your email and phone on the last
-                step, and they're shared only once someone unlocks your listing.
-              </p>
+              <p>{t.buy.descriptionHint}</p>
             )}
           </div>
         )}
 
         {step === 1 && (
           <fieldset className="flex flex-col gap-2">
-            <legend className="mb-2 font-bold">What's your budget for this work?</legend>
+            <legend className="mb-2 font-bold">{t.buy.budgetLegend}</legend>
             <div className="grid md:grid-cols-2 gap-2">
-              {TIERS.map((t) => (
+              {TIERS.map((value) => (
                 <label
-                  key={t}
+                  key={value}
                   className={`flex items-center justify-center border-2 p-4 text-center font-bold cursor-pointer hover:brightness-95 ${
-                    tier === t ? 'bg-offblack border-black text-white' : 'bg-white'
+                    tier === value ? 'bg-offblack border-black text-white' : 'bg-white'
                   }`}
                 >
                   <input
                     type="radio"
                     name="tier"
-                    value={t}
-                    checked={tier === t}
-                    onChange={() => setTier(t)}
+                    value={value}
+                    checked={tier === value}
+                    onChange={() => setTier(value)}
                     className="sr-only"
                   />
-                  {TIER_BUDGETS[t]}
+                  {budgetLabel(t, lang, value)}
                 </label>
               ))}
             </div>
@@ -161,10 +162,11 @@ export function Buy() {
         )}
 
         {step === 2 && (
-          <div className='grid md:grid-cols-2 gap-2'>
+          <div className="grid md:grid-cols-2 gap-2">
             <div className="flex flex-col gap-2">
-              <label htmlFor="email" className='font-bold'>Email</label>
+              <label htmlFor="email" className="font-bold">{t.common.email}</label>
               <input
+                id="email"
                 type="email"
                 value={email}
                 onChange={(e) => {
@@ -172,7 +174,7 @@ export function Buy() {
                   clearError('email')
                 }}
                 maxLength={254}
-                placeholder="Email"
+                placeholder={t.common.email}
                 aria-invalid={!!errors.email}
                 aria-describedby={errors.email ? 'email-error' : undefined}
                 className="w-full border-2 p-3 bg-white"
@@ -183,15 +185,16 @@ export function Buy() {
             </div>
 
             <div className="flex flex-col gap-2">
-              <label htmlFor="phone" className='font-bold'>Phone</label>
+              <label htmlFor="phone" className="font-bold">{t.common.phone}</label>
               <input
+                id="phone"
                 type="tel"
                 value={phone}
                 onChange={(e) => {
                   setPhone(e.target.value)
                   clearError('phone')
                 }}
-                placeholder="Phone"
+                placeholder={t.common.phone}
                 aria-invalid={!!errors.phone}
                 aria-describedby={errors.phone ? 'phone-error' : undefined}
                 className="w-full border-2 p-3 bg-white"
@@ -217,7 +220,7 @@ export function Buy() {
               disabled={pending}
               className="bg-offwhite border-2 px-4 py-2 cursor-pointer hover:brightness-75 disabled:opacity-50"
             >
-              Back
+              {t.common.back}
             </button>
           )}
           <button
@@ -226,12 +229,12 @@ export function Buy() {
             className="bg-yellow text-black border-2 border-black px-4 py-2 cursor-pointer hover:brightness-75 disabled:opacity-50"
           >
             {step < LAST_STEP
-              ? `Next Step (${step + 1}/${LAST_STEP + 1})`
+              ? t.buy.next(step + 1, LAST_STEP + 1)
               : pending
-                ? 'Posting…'
+                ? t.buy.posting
                 : !token
-                  ? 'Verifying…'
-                  : 'Post'}
+                  ? t.common.verifying
+                  : t.buy.post}
           </button>
         </div>
 

@@ -2,9 +2,10 @@ import { Link } from "react-router";
 import ArrowBack from "../assets/arrow-back.svg?react";
 import { useI18n } from "../lib/i18n-context";
 
-type Size = "sm" | "md" | "lg" | "xl";
+type Size = "xs" | "sm" | "md" | "lg" | "xl";
 
 const sizeClasses: Record<Size, string> = {
+  xs: "max-w-xl",
   sm: "max-w-2xl",
   md: "max-w-3xl",
   lg: "max-w-4xl",

@@ -1,29 +1,21 @@
 import { useEffect, useState } from "react"
 import { Link, useSearchParams } from "react-router"
-import { ApiError, getUnlockedDetails } from "../lib/api"
+import { getUnlockedDetails } from "../lib/api"
+import { describeError } from "../lib/errors"
+import { useI18n } from "../lib/i18n-context"
 import type { UnlockedDetails } from "../types"
 import { canRenderInPdf, downloadDealPdf } from "../lib/deal-pdf"
 import { saveUnlocked } from "../lib/unlocked-storage"
 import { ChildLayout } from "../layouts/child-layout"
 
-// State type: add `saved`
+// The error itself is kept, not its text, so the message follows the language
 type State =
   | { status: "loading" }
   | { status: "ready"; details: UnlockedDetails; saved: boolean }
-  | { status: "error"; message: string }
-
-function errorMessage(err: unknown) {
-  if (err instanceof ApiError) {
-    if (err.status === 404) return "We couldn't find this payment."
-    if (err.status === 402) return "Your payment hasn't been confirmed yet. Try again in a moment."
-    if (err.status === 410) return "These details are no longer available."
-    if (err.status === 502) return "Couldn't reach the payment provider. Try again."
-    return err.message
-  }
-  return "Something went wrong."
-}
+  | { status: "error"; error: unknown }
 
 export function UnlockSuccess() {
+  const { t, lang } = useI18n()
   const [params] = useSearchParams()
   const sessionId = params.get("session_id")
 
@@ -50,8 +42,8 @@ export function UnlockSuccess() {
 
         if (!cancelled) setState({ status: "ready", details, saved })
       })
-      .catch((err) => {
-        if (!cancelled) setState({ status: "error", message: errorMessage(err) })
+      .catch((error) => {
+        if (!cancelled) setState({ status: "error", error })
       })
 
     return () => {
@@ -69,10 +61,10 @@ export function UnlockSuccess() {
     setPdfError(null)
 
     try {
-      await downloadDealPdf(details)
+      await downloadDealPdf(details, t, lang)
     } catch (err) {
       console.error(err)
-      setPdfError("Could not create the PDF. Please try again.")
+      setPdfError(t.pdf.failed)
     } finally {
       setPdfPending(false)
     }
@@ -81,37 +73,34 @@ export function UnlockSuccess() {
   return (
     <ChildLayout>
       {!sessionId ? (
-        <p>This page needs a payment link.</p>
+        <p>{t.unlockSuccess.needsLink}</p>
       ) : state.status === "loading" ? (
-        <p>Confirming your payment…</p>
+        <p>{t.unlockSuccess.confirming}</p>
       ) : state.status === "error" ? (
         <div className="flex flex-col gap-4">
-          <p role="alert" className="text-error">{state.message}</p>
+          <p role="alert" className="text-error">{describeError(t, state.error)}</p>
           <button
             type="button"
             onClick={retry}
             className="self-start border-2 border-black bg-white px-3 py-2 cursor-pointer hover:brightness-75"
           >
-            Try again
+            {t.common.tryAgain}
           </button>
         </div>
       ) : (
         <div className="flex flex-col gap-4">
-          <h1 className="text-3xl font-bold text-green">Success!</h1>
-          <p>
-            You've unlocked this listing. You can now reach the buyer using the email
-            and phone below.
-          </p>
+          <h1 className="text-3xl font-bold text-green">{t.common.success}</h1>
+          <p>{t.unlockSuccess.intro}</p>
 
           <div className="flex flex-col gap-2 border-2 bg-white p-4">
             <p>
-              Email:{" "}
+              {t.common.email}:{" "}
               <a href={`mailto:${state.details.email}`} className="underline">
                 {state.details.email}
               </a>
             </p>
             <p>
-              Phone:{" "}
+              {t.common.phone}:{" "}
               <a href={`tel:${state.details.phone}`} className="underline">
                 {state.details.phone}
               </a>
@@ -119,16 +108,17 @@ export function UnlockSuccess() {
           </div>
 
           <p>
-            Please make sure you've downloaded the PDF or saved these contact details
-            another way.{" "}
+            {t.unlockSuccess.saveReminder}{" "}
             {state.saved ? (
               <>
-                A copy is kept in your{" "}
-                <Link to="/unlocked" className="underline">unlocked list</Link> on this
-                device, but it disappears if you clear your browser data.
+                {t.unlockSuccess.savedBefore}
+                <Link to="/unlocked" className="underline">
+                  {t.unlockSuccess.savedLink}
+                </Link>
+                {t.unlockSuccess.savedAfter}
               </>
             ) : (
-              <>They couldn't be saved on this device.</>
+              <>{t.unlockSuccess.notSaved}</>
             )}
           </p>
 
@@ -138,17 +128,12 @@ export function UnlockSuccess() {
             disabled={pdfPending}
             className="self-start bg-green text-white px-3 py-2 border-2 border-black cursor-pointer hover:brightness-75 disabled:opacity-50"
           >
-            {pdfPending ? "Creating PDF…" : "Download PDF"}
+            {pdfPending ? t.pdf.creating : t.pdf.download}
           </button>
           {pdfError && <p role="alert" className="text-error">{pdfError}</p>}
           {!canRenderInPdf(
             [state.details.description, state.details.email, state.details.phone].join(" ")
-          ) && (
-            <p>
-              Some characters in these details can't be shown in the PDF. Everything is
-              still on this page.
-            </p>
-          )}
+          ) && <p>{t.unlockSuccess.pdfUnsupported}</p>}
         </div>
       )}
     </ChildLayout>

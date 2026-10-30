@@ -9,26 +9,41 @@ const TIMEOUT_MS = 20_000
 
 const TURNSTILE_HEADER = "x-turnstile-token"
 
-// What users see when the server gave no usable message of its own.
-function defaultMessage(status: number) {
-  if (status === 0) return "Can't reach the server. Check your connection and try again."
-  if (status === 403) return "Verification failed. Please try again."
-  if (status === 404) return "We couldn't find that."
-  if (status === 413) return "That request is too large."
-  if (status === 429) return "Too many requests. Please wait a minute and try again."
-  if (status >= 500) return "Something went wrong on our side. Please try again."
-  return "Something went wrong. Please check your input and try again."
-}
+// Sent by deals-api. Keep in sync with deals-api (src/lib/error-codes.ts).
+export type ServerErrorCode =
+  | "invalid_input"
+  | "body_too_large"
+  | "rate_limited"
+  | "too_many_checkouts"
+  | "verification_required"
+  | "verification_failed"
+  | "verification_unavailable"
+  | "contact_info"
+  | "listing_unavailable"
+  | "checkout_failed"
+  | "session_not_found"
+  | "payment_unavailable"
+  | "payment_incomplete"
+  | "details_gone"
+  | "not_found"
+  | "internal"
+
+  // Raised here, never sent by the server
+export type ClientErrorCode = "network" | "timeout" | "bad_response"
+
+export type ErrorCode = ServerErrorCode | ClientErrorCode
 
 export class ApiError extends Error {
   // 0 means there was no response at all (offline, blocked, timed out).
   status: number
-  field?: string
+  // null: the server sent no usable code (a proxy or error page in the way)
+  code: ErrorCode | null
 
-  constructor(status: number, message?: string, field?: string) {
-    super(message ?? defaultMessage(status))
+  constructor(status: number, code: ErrorCode | null = null) {
+    // for the console only: users get text from describeError
+    super(code ?? `Request failed: ${status}`)
     this.status = status
-    this.field = field
+    this.code = code
   }
 }
 
@@ -44,29 +59,22 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     // fetch only throws when there is no response at all. Nothing else aborts
     // these requests, so an abort here is the timeout.
     if (err instanceof DOMException && (err.name === "TimeoutError" || err.name === "AbortError")) {
-      throw new ApiError(0, "The server took too long to respond. Please try again.")
+      throw new ApiError(0, "timeout")
     }
-    throw new ApiError(0)
+    throw new ApiError(0, "network")
   }
 
   if (!res.ok) {
-    const body = (await res.json().catch(() => null)) as
-      | { error?: unknown; field?: unknown }
-      | null
-
-    // Only trust server messages for client errors; 5xx keeps the generic text.
-    const message =
-      res.status < 500 && typeof body?.error === "string" ? body.error : undefined
-    const field = typeof body?.field === "string" ? body.field : undefined
-
-    throw new ApiError(res.status, message, field)
+    const body = (await res.json().catch(() => null)) as { code?: unknown } | null
+    const code = typeof body?.code === "string" ? (body.code as ErrorCode) : null
+    throw new ApiError(res.status, code)
   }
 
   try {
     return (await res.json()) as T
   } catch {
     // A 2xx that isn't JSON (a proxy or error page in the way).
-    throw new ApiError(502)
+    throw new ApiError(502, "bad_response")
   }
 }
 
@@ -100,7 +108,7 @@ export async function startUnlock(buyId: number, listingId: string, token: strin
     { [TURNSTILE_HEADER]: token }
   )
 
-  if (!isStripeCheckoutUrl(url)) throw new ApiError(502)
+  if (!isStripeCheckoutUrl(url)) throw new ApiError(502, "bad_response")
 
   return { url }
 }

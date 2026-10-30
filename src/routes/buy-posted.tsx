@@ -1,8 +1,11 @@
 import { Navigate, useLocation } from "react-router"
 import { ChildLayout } from "../layouts/child-layout"
+import { useI18n } from "../lib/i18n-context"
 import type { BuyPostedState } from "../types"
 
 export function BuyPosted() {
+  const { t } = useI18n()
+
   // Set by the buy form right after a successful post. Opening this URL
   // directly has no state, so it redirects. A refresh keeps it, because it
   // lives in the history entry.
@@ -13,32 +16,20 @@ export function BuyPosted() {
   return (
     <ChildLayout>
       <div className="flex flex-col gap-4">
-        <h1 className="text-3xl font-bold text-green">Success!</h1>
-        <p>
-          Anyone who wants to work on your need can now
-          reach you using the email and phone below.
-        </p>
+        <h1 className="text-3xl font-bold text-green">{t.common.success}</h1>
+        <p>{t.buyPosted.intro}</p>
 
         <div className="flex flex-col gap-2 border-2 bg-white p-4">
           <p>
-            Email:{" "}
-            <span>
-              {state.email}
-            </span>
+            {t.common.email}: <span>{state.email}</span>
           </p>
           <p>
-            Phone:{" "}
-            <span>
-              {state.phone}
-            </span>
+            {t.common.phone}: <span>{state.phone}</span>
           </p>
         </div>
 
-        <p>
-          If nobody contacts you within 3 days, it means no one decided to work
-          on your need, and the listing expires.
-        </p>
-        <p>You can now safely close this page.</p>
+        <p>{t.buyPosted.expiry}</p>
+        <p>{t.buyPosted.close}</p>
       </div>
     </ChildLayout>
   )

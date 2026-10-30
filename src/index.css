@@ -8,9 +8,7 @@
   /* Neutrals: light to dark */
   --white:    #ffffff;
   --offwhite: #f3f0e7;
-  --pink:     #a49999;
-  --grey:     #8a8680;
-  --sage:     #70756c;
+  --grey:     #575653;
   --offblack: #1c1d1b;
   --black:    #000000;
 
@@ -37,9 +35,7 @@
   /* Neutrals */
   --color-white:      var(--white);
   --color-offwhite:   var(--offwhite);
-  --color-pink:       var(--pink);
   --color-grey:       var(--grey);
-  --color-sage:       var(--sage);
   --color-offblack:   var(--offblack);
   --color-black:      var(--black);
 
