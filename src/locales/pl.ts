@@ -104,12 +104,25 @@ export const pl = {
   howItWorks: {
     title: 'Jak to działa',
     intro: 'Deals łączy osoby, które czegoś potrzebują, z osobami, które mogą to zapewnić. Bez zakładania konta.',
-    buyerTitle: 'Jeśli czegoś potrzebujesz',
-    buyerText: 'Opisz, czego potrzebujesz, wybierz przedział budżetu i podaj e-mail oraz telefon. Dodanie ogłoszenia jest bezpłatne, a samo ogłoszenie wygasa po 3 dniach.',
-    sellerTitle: 'Jeśli coś oferujesz',
-    sellerText: 'Opisz, co oferujesz. Twoje ogłoszenie zostaje w przeglądarce, a my szukamy kupujących, których potrzeby do niego pasują.',
-    unlockTitle: 'Odblokowanie',
-    unlockText: 'Zapłać przez Stripe, aby otrzymać e-mail i telefon kupującego. Cena zależy od budżetu kupującego, a każde zapotrzebowanie może odblokować tylko jeden sprzedawca.',
+    buyers: {
+      title: 'Dla kupujących',
+      text: 'Opisz, czego potrzebujesz. To nic nie kosztuje.',
+      bullets: [
+        'Opisz swoje zapotrzebowanie i wybierz przedział budżetu.',
+        'Podaj e-mail i telefon. Pozostają ukryte, dopóki sprzedawca nie zapłaci za ich odblokowanie.',
+        'Ogłoszenie wygasa po 3 dniach lub po odblokowaniu.',
+      ],
+    },
+    sellers: {
+      title: 'Dla sprzedawców',
+      text: 'Opisz, co oferujesz, i znajdź osoby, które tego potrzebują.',
+      bullets: [
+        'Twoje ogłoszenie zostaje w przeglądarce, nie na naszych serwerach.',
+        'Szukaj pasujących zapotrzebowań i zobacz ich budżety.',
+        'Zapłać, aby odblokować e-mail i telefon kupującego. Każde zapotrzebowanie może odblokować tylko jeden sprzedawca.',
+        'Zapisz dane od razu.',
+      ],
+    },
   },
   settings: {
     title: 'Ustawienia',

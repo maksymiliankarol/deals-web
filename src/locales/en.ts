@@ -102,15 +102,28 @@ export const en = {
     clearBody: (count: number) => `This removes all ${count} items from this device. If you haven't saved the PDFs or the contact details elsewhere, you may not be able to get them back.`,
   },
   howItWorks: {
-    title: 'How It Works',
-    intro: 'Deals connects people who need something with people who can provide it. No account needed.',
-    buyerTitle: 'If you need something',
-    buyerText: 'Post what you need, pick your budget range and leave your email and phone. Posting is free, and your listing expires after 3 days.',
-    sellerTitle: 'If you offer something',
-    sellerText: 'Describe what you offer. Your listing stays in your browser, and we search for buyers whose needs match.',
-    unlockTitle: 'Unlocking',
-    unlockText: "Pay on Stripe to get a buyer's email and phone. The price depends on the buyer's budget, and only one seller can unlock each need.",
-  },
+      title: 'How It Works',
+      intro: 'Deals connects people who need something with people who can provide it. No account needed.',
+      buyers: {
+        title: 'For buyers',
+        text: 'Post what you need. It is free.',
+        bullets: [
+          'Describe your need and pick a budget range.',
+          'Add your email and phone. They stay hidden until a seller pays to unlock them.',
+          'Your listing expires after 3 days, or when it is unlocked.',
+        ],
+      },
+      sellers: {
+        title: 'For sellers',
+        text: 'Describe what you offer and find people who need it.',
+        bullets: [
+          'Your listing stays in your browser, not on our servers.',
+          'Search for matching needs and see their budgets.',
+          'Pay to unlock a buyer\'s email and phone. Only one seller can unlock each need.',
+          'Save the details right away.',
+        ],
+      },
+    },
   settings: {
     title: 'Settings',
     language: 'Language',

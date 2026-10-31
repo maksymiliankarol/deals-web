@@ -10,7 +10,7 @@ export function describeError(
   if (!(error instanceof ApiError)) return fallback
 
   // Fails the build if a code has no text in en.ts
-  const messages: Record<ErrorCode, string> = t.err3ors
+  const messages: Record<ErrorCode, string> = t.errors
 
   if (error.code && error.code in messages) return messages[error.code]
   if (error.status === 429) return messages.rate_limited

@@ -41,7 +41,7 @@ export function Home() {
               rel="noopener noreferrer"
               className={`${tile} ${className}`}
             >
-              {label}
+              {t.home[label]}
               <span className="sr-only"> {t.common.opensInNewTab}</span>
             </a>
           ) : (
