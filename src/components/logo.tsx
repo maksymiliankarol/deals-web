@@ -2,7 +2,7 @@ const Logo = () => {
   return (
     <div className="logo">
       <span className="logo-text">
-        Metalogrom
+        M - Deals
         <span className="logo-dot logo-dot-top" aria-hidden="true" />
         <span className="logo-dot logo-dot-left" aria-hidden="true" />
         <span className="logo-dot logo-dot-right" aria-hidden="true" />
