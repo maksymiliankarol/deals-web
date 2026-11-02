@@ -69,8 +69,11 @@ table {
   --link: #003f9a;
   --link-dark: #00265c;
   --success: #00804f;
+  --success-dark: #014229;
   --warning: #f7a700;
+  --warning-dark: #b98004;
   --destructive: #e0161f;
+  --destructive-dark: #a31219;
 
   --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
   --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -183,6 +186,14 @@ button:hover:not(:disabled) {
   background: var(--link-dark);
 }
 
+button.destructive {
+  background: var(--destructive);
+}
+
+button.destructive:hover {
+  background: var(--destructive-dark);
+}
+
 button:disabled {
   background: var(--grey-4);
   color: var(--grey-8);
@@ -191,13 +202,30 @@ button:disabled {
 
 table {
   width: 100%;
+  table-layout: fixed;
   border-collapse: collapse;
   background: var(--grey-1);
 }
 
+th:nth-child(1) { width: 3rem; }
+th:nth-child(2) { width: 7rem; }
+th:nth-child(5) { width: 6rem; }
+
+td:first-child {
+  text-align: right;
+}
+
+td:nth-child(2) {
+  white-space: nowrap;
+}
+
+td ol {
+  list-style: decimal inside;
+}
+
 th,
 td {
-  padding: 0.25rem 0.5rem;
+  padding: 0.25rem 0.25rem;
   border: 1px solid var(--grey-6);
   text-align: left;
   vertical-align: top;
@@ -206,22 +234,9 @@ td {
 th {
   background: var(--grey-3);
   font-size: 0.875rem;
+  font-weight: 600;
 }
 
-td:first-child {
-  width: 1%;
-  text-align: right;
-}
-
-td:nth-child(2) {
-  white-space: nowrap;
-}
-
-td:nth-child(4),
-td:nth-child(5) {
-  width: 1%;
-  white-space: nowrap;
-}
 
 :focus-visible {
   outline: 1px solid var(--black);
@@ -231,7 +246,7 @@ td:nth-child(5) {
 /* Custom styling */
 
 .layout {
-  max-width: 900px;
+  max-width: 1024px;
   margin: auto;
   padding: 1rem;
   background: var(--grey-2);
@@ -246,6 +261,32 @@ td:nth-child(5) {
   margin-bottom: 1rem;
   border-bottom: 1px dashed var(--grey-6);
 }
+
+.link {
+  color: var(--link);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.link:hover {
+  color: var(--link-dark);
+  text-decoration-thickness: 2px;
+}
+
+
+/* Blocks */
+
+.block {
+  width: 100%;  
+}
+
+@media (min-width: 768px) {
+  .block-small  { width: 33.333%; }
+  .block-medium { width: 66.666%; }
+  .block-large  { width: 100%; }
+}
+
+/* Branding */
 
 .logo {
   font-weight: 600;
@@ -294,8 +335,4 @@ td:nth-child(5) {
   top: 50%;
   transform: translateY(-50%);
   color: var(--success);
-}
-
-.results td {
-  background: var(--grey-2);
 }

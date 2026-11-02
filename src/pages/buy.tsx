@@ -31,12 +31,12 @@ export default function Buy() {
   }
 
   return (
-    <div>
+    <>
       <section className="heading">
         <h1>{t.buy.title}</h1>
         <p>{t.buy.intro}</p>
       </section>
-      <form onSubmit={handleSubmit}>
+      <form className="block block-medium" onSubmit={handleSubmit}>
         <label>
           {t.buy.phone}*
           <input
@@ -68,6 +68,6 @@ export default function Buy() {
 
       {status === "success" && <p role="status">{t.buy.success}</p>}
       {status === "error" && <p role="alert">{t.errors[errorKind]}</p>}
-    </div>
+    </>
   );
 }

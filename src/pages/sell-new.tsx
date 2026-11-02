@@ -21,12 +21,12 @@ export default function SellNew() {
   }
 
   return (
-    <div>
+    <>
       <section className="heading">
         <h1>{t.sellNew.title}</h1>
         <p>{t.sellNew.text}</p>
       </section>
-      <form onSubmit={handleSubmit}>
+      <form className="block block-medium" onSubmit={handleSubmit}>
         <label>
           <textarea 
             name="text" 
@@ -39,20 +39,6 @@ export default function SellNew() {
         <button type="submit">Save</button>
       </form>
       {error && <p role="alert">{error}</p>}
-    </div>
-  )
-
-  return (
-    <>
-      <h1>New listing</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          What do you have to sell?
-          <textarea name="text" required minLength={10} maxLength={500} rows={4} />
-        </label>
-        <button type="submit">Save</button>
-      </form>
-      {error && <p role="alert">{error}</p>}
     </>
-  );
+  )
 }

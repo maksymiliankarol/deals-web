@@ -14,6 +14,7 @@ const en = {
   },
   sell: {
     title: "Sell",
+    intro: "Here are all your listings. Click 'Search' to see buyers looking for what you offer.",
     add: "Add a listing",
     empty: "No listings yet.",
     colNumber: "No.",
@@ -21,7 +22,7 @@ const en = {
     colDescription: "Description",
     colMatches: "Matches",
     colRemove: "Remove",
-    findMatches: "Find matches",
+    search: "Search",
     remove: "Remove",
     searching: "Searching…",
     noMatches: "No matches yet.",

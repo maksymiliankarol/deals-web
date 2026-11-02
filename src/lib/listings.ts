@@ -27,7 +27,7 @@ export function addListing(text: string): boolean {
     text,
     createdAt: new Date().toISOString(),
   };
-  return save([listing, ...getListings()]);
+  return save([...getListings(), listing]);
 }
 
 export function removeListing(id: string): Listing[] {

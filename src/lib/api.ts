@@ -1,7 +1,19 @@
 import type { Messages } from "../locales/en";
-import type { BuyInput, Match } from "../types";
 
 const API_URL = import.meta.env.VITE_API_URL as string;
+
+export type BuyInput = {
+  phone: string;
+  email: string;
+  description: string;
+};
+
+export type Match = {
+  id: number;
+  description: string;
+  created_at: string;
+  score: number;
+};
 
 export class ApiError extends Error {
   status: number;

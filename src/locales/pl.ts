@@ -16,6 +16,7 @@ const pl: Messages = {
   },
   sell: {
     title: "Sprzedaję",
+    intro: "Poniżej znajdziesz wszystkie swoje oferty. Kliknij „Szukaj”, aby zobaczyć, kto szuka tego, co oferujesz.",
     add: "Dodaj ofertę",
     empty: "Nie masz jeszcze ofert.",
     colNumber: "Nr",
@@ -23,7 +24,7 @@ const pl: Messages = {
     colDescription: "Opis",
     colMatches: "Dopasowania",
     colRemove: "Usuń",
-    findMatches: "Znajdź dopasowania",
+    search: "Szukaj",
     remove: "Usuń",
     searching: "Szukanie…",
     noMatches: "Brak dopasowań.",
