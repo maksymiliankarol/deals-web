@@ -1,6 +1,9 @@
 const en = {
   layout: { home: "Home", buy: "Buy", sell: "Sell", language: "Language" },  
-  home: { title: "Home" },
+  home: { 
+    title: "Welcome at Metalogrom Deals", 
+    intro: "A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart. I am alone, and feel the charm of existence in this spot, which was created for the bliss of souls like mine." 
+  },
   buy: {
     title: "Buy",
     intro: "Fill out the form below and describe what you are looking for.",

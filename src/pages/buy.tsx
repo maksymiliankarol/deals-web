@@ -31,43 +31,45 @@ export default function Buy() {
   }
 
   return (
-    <>
-      <section className="heading">
-        <h1>{t.buy.title}</h1>
-        <p>{t.buy.intro}</p>
-      </section>
-      <form className="block block-medium" onSubmit={handleSubmit}>
-        <label>
-          {t.buy.phone}*
-          <input
-            name="phone"
-            type="tel"
-            required
-            pattern="\+?[0-9]{7,15}"
-            title={t.buy.phoneHint}
-          />
-        </label>
-        <label>
-          {t.buy.email}*
-          <input name="email" type="email" required />
-        </label>
-        <label>
-          {t.buy.description}*
-          <textarea
-            name="description"
-            required
-            minLength={10}
-            maxLength={500}
-            rows={4}
-          />
-        </label>
-        <button type="submit" disabled={status === "submitting"}>
-          {status === "submitting" ? t.buy.submitting : t.buy.submit}
-        </button>
-      </form>
+    <div className="scroll">
+      <div className="page sm">
+        <section className="heading">
+          <h1>{t.buy.title}</h1>
+          <p>{t.buy.intro}</p>
+        </section>
+        <form className="column sm" onSubmit={handleSubmit}>
+          <label>
+            {t.buy.phone}*
+            <input
+              name="phone"
+              type="tel"
+              required
+              pattern="\+?[0-9]{7,15}"
+              title={t.buy.phoneHint}
+            />
+          </label>
+          <label>
+            {t.buy.email}*
+            <input name="email" type="email" required />
+          </label>
+          <label>
+            {t.buy.description}*
+            <textarea
+              name="description"
+              required
+              minLength={10}
+              maxLength={500}
+              rows={4}
+            />
+          </label>
+          <button type="submit" disabled={status === "submitting"}>
+            {status === "submitting" ? t.buy.submitting : t.buy.submit}
+          </button>
+        </form>
 
-      {status === "success" && <p role="status">{t.buy.success}</p>}
-      {status === "error" && <p role="alert">{t.errors[errorKind]}</p>}
-    </>
+        {status === "success" && <p role="status">{t.buy.success}</p>}
+        {status === "error" && <p role="alert">{t.errors[errorKind]}</p>}
+      </div>
+    </div>
   );
 }

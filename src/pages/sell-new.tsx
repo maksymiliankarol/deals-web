@@ -21,24 +21,26 @@ export default function SellNew() {
   }
 
   return (
-    <>
-      <section className="heading">
-        <h1>{t.sellNew.title}</h1>
-        <p>{t.sellNew.text}</p>
-      </section>
-      <form className="block block-medium" onSubmit={handleSubmit}>
-        <label>
-          <textarea 
-            name="text" 
-            required 
-            minLength={10} 
-            maxLength={500} 
-            rows={4} 
-          />
-        </label>
-        <button type="submit">Save</button>
-      </form>
-      {error && <p role="alert">{error}</p>}
-    </>
+    <div className="scroll">
+      <div className="page sm">
+        <section className="heading">
+          <h1>{t.sellNew.title}</h1>
+          <p>{t.sellNew.text}</p>
+        </section>
+        <form className="column" onSubmit={handleSubmit}>
+          <label>
+            <textarea 
+              name="text" 
+              required 
+              minLength={10} 
+              maxLength={500} 
+              rows={4} 
+            />
+          </label>
+          <button type="submit">Save</button>
+        </form>
+        {error && <p role="alert">{error}</p>}
+      </div>
+    </div>
   )
 }

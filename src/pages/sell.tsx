@@ -34,7 +34,7 @@ export default function Sell() {
   const foundFor = search?.status === "done" && search.matches.length > 0 ? search.listingId : null;
 
   return (
-    <>
+    <div className="page xl scroll">
       <section className="heading">
         <h1>{t.sell.title}</h1>
         <p>{t.sell.intro}</p>
@@ -43,73 +43,75 @@ export default function Sell() {
       {listings.length === 0 ? (
         <p>{t.sell.empty}</p>
       ) : (
-        <table>
-          <thead>
-            <tr>
-              <th>{t.sell.colNumber}</th>
-              <th>{t.sell.colDate}</th>
-              <th>{t.sell.colDescription}</th>
-              <th>{t.sell.colMatches}</th>
-              <th>{t.sell.colRemove}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {listings.map((l, i) => (
-              <tr key={l.id}>
-                <td>{i + 1}</td>
-                <td>{formatDate(l.createdAt, lang)}</td>
-                <td>
-                  <Truncate lines={3}>{l.text}</Truncate>
-                </td>
-                <td>
-                  {foundFor !== l.id && (
-                    <button
-                      type="button"
-                      onClick={() => findMatches(l.id, l.text)}
-                      disabled={search?.status === "loading"}
-                    >
-                      {t.sell.search}
-                    </button>
-                  )}
-                  {search?.listingId === l.id && (
-                    <>
-                      {search.status === "loading" && <p>{t.sell.searching}</p>}
-                      {search.status === "error" && (
-                        <p role="alert">{t.errors[search.errorKind]}</p>
-                      )}
-                      {search.status === "done" && search.matches.length === 0 && (
-                        <p>{t.sell.noMatches}</p>
-                      )}
-                      {search.status === "done" && search.matches.length > 0 && (
-                        <ol>
-                          {search.matches.map((m) => (
-                            <li className="link" key={m.id}>
-                              {m.description} ({formatDate(m.created_at, lang)})
-                            </li>
-                          ))}
-                        </ol>
-                      )}
-                    </>
-                  )}
-                </td>
-                <td>
-                  <button 
-                    type="button" 
-                    className="destructive" 
-                    onClick={() => handleRemove(l.id)}
-                  >
-                    {t.sell.remove}
-                  </button>
-                </td>
+        <div className="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>{t.sell.colNumber}</th>
+                <th>{t.sell.colDate}</th>
+                <th>{t.sell.colDescription}</th>
+                <th>{t.sell.colMatches}</th>
+                <th>{t.sell.colRemove}</th>
               </tr>
-            ))}
-          </tbody>
-          
-        </table>
+            </thead>
+            <tbody>
+              {listings.map((l, i) => (
+                <tr key={l.id}>
+                  <td>{i + 1}</td>
+                  <td>{formatDate(l.createdAt, lang)}</td>
+                  <td>
+                    <Truncate lines={3}>{l.text}</Truncate>
+                  </td>
+                  <td>
+                    {foundFor !== l.id && (
+                      <button
+                        type="button"
+                        onClick={() => findMatches(l.id, l.text)}
+                        disabled={search?.status === "loading"}
+                      >
+                        {t.sell.search}
+                      </button>
+                    )}
+                    {search?.listingId === l.id && (
+                      <>
+                        {search.status === "loading" && <p>{t.sell.searching}</p>}
+                        {search.status === "error" && (
+                          <p role="alert">{t.errors[search.errorKind]}</p>
+                        )}
+                        {search.status === "done" && search.matches.length === 0 && (
+                          <p>{t.sell.noMatches}</p>
+                        )}
+                        {search.status === "done" && search.matches.length > 0 && (
+                          <ol>
+                            {search.matches.map((m) => (
+                              <li className="link" key={m.id}>
+                                {m.description} ({formatDate(m.created_at, lang)})
+                              </li>
+                            ))}
+                          </ol>
+                        )}
+                      </>
+                    )}
+                  </td>
+                  <td>
+                    <button 
+                      type="button" 
+                      className="destructive" 
+                      onClick={() => handleRemove(l.id)}
+                    >
+                      {t.sell.remove}
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+            
+          </table>
+        </div>
       )}
       <p>
         <Link to="/sell/new">{t.sell.add}</Link>
       </p>
-    </>
+    </div>
   );
 }
