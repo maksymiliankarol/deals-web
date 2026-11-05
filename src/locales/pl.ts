@@ -1,8 +1,19 @@
 import type { Messages } from "./en";
 
 const pl: Messages = {
-  layout: { home: "Strona główna", buy: "Kupuję", sell: "Sprzedaję", language: "Język" },
-  home: { title: "Strona główna" },
+  languageName: "Polski",
+  layout: { 
+    home: "Strona główna", 
+    buy: "Kupuję", 
+    sell: "Sprzedaję", 
+    settings: "Ustawienia",
+    menu: "Menu",
+    close: "Zamknij menu",
+  },
+  home: { 
+    title: "Witaj w Deals", 
+    intro: "TODO"
+  },
   buy: {
     title: "Kupuję",
     intro: "Wypełnij poniższy formularz i opisz, czego szukasz.",
@@ -34,6 +45,11 @@ const pl: Messages = {
     text: "Co chcesz sprzedać?",
     save: "Zapisz",
     saveError: "Nie udało się zapisać oferty w tej przeglądarce.",
+  },
+  settings: {
+    title: "Ustawienia",
+    intro: "Dostosuj aplikację.",
+    language: "Język",
   },
   errors: {
     tooManyRequests: "Zbyt wiele żądań. Odczekaj minutę.",

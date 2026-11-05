@@ -1,8 +1,16 @@
 const en = {
-  layout: { home: "Home", buy: "Buy", sell: "Sell", language: "Language" },  
+  languageName: "English",
+  layout: { 
+    home: "Home", 
+    buy: "Buy", 
+    sell: "Sell", 
+    settings: "Settings",
+    menu: "Menu",
+    close: "Close menu",
+  },  
   home: { 
-    title: "Welcome at Metalogrom Deals", 
-    intro: "A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart. I am alone, and feel the charm of existence in this spot, which was created for the bliss of souls like mine." 
+    title: "Welcome at Deals", 
+    intro: "TODO" 
   },
   buy: {
     title: "Buy",
@@ -35,6 +43,11 @@ const en = {
     text: "What do you have to sell?",
     save: "Save",
     saveError: "Could not save the listing in this browser.",
+  },
+  settings: {
+    title: "Settings",
+    intro: "Customize this app.",
+    language: "Language",
   },
   errors: {
     tooManyRequests: "Too many requests. Please wait a minute.",
