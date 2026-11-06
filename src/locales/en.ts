@@ -4,6 +4,7 @@ const en = {
     home: "Home", 
     buy: "Buy", 
     sell: "Sell", 
+    unlocked: "Unlocked",
     settings: "Settings",
     menu: "Menu",
     close: "Close menu",
@@ -45,13 +46,26 @@ const en = {
     save: "Save",
     saveError: "Could not save the listing in this browser.",
   },
-  unlocked: {
-    title: "Contact details",
-    intro: "Here is how to reach the buyer. Keep the link to this page: it shows these details again.",
+  success: {
+    title: "Payment confirmed",
+    intro: "These details are shown only once. A copy is saved in this browser, but write them down too.",
     loading: "Confirming your payment…",
     description: "Request",
     email: "Email",
     phone: "Phone",
+    viewSaved: "See all unlocked contacts",
+  },
+  unlocked: {
+    title: "Unlocked contacts",
+    intro: "Contacts you unlocked, saved in this browser only. Clearing site data deletes them.",
+    empty: "Nothing unlocked yet.",
+    description: "Request",
+    email: "Email",
+    phone: "Phone",
+    colId: "ID",
+    colDate: "Date",
+    colPrice: "Price",
+    remove: "Remove",
   },
   settings: {
     title: "Settings",
@@ -65,6 +79,7 @@ const en = {
     unavailable: "This request is no longer available.",
     notFound: "Purchase not found.",
     pending: "Your payment is still being processed. Refresh this page in a moment.",
+    alreadyRevealed: "These details were already shown and can't be opened again.",
   },
 };
 

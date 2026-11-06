@@ -1,71 +1,62 @@
-import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router";
-import { getErrorKind, getUnlocked, type ErrorKind, type Unlocked } from "../lib/api";
+import { useState } from "react";
+import { formatDate } from "../lib/dates";
 import { useLocale } from "../locales";
+import { getSaved, removeSaved } from "../lib/unlocked";
 
-type State =
-  | { status: "loading" }
-  | { status: "done"; data: Unlocked }
-  | { status: "error"; errorKind: ErrorKind };
-
-// The webhook usually lands within a second; give it up to 30 s.
-const POLL_MS = 2000;
-const MAX_TRIES = 15;
+const money = (amount: number, currency: string, lang: string) =>
+  new Intl.NumberFormat(lang, { style: "currency", currency: currency.toUpperCase() })
+    .format(amount / 100);
 
 export default function Unlocked() {
-  const { t } = useLocale();
-  const [params] = useSearchParams();
-  const sessionId = params.get("session_id");
-  const [state, setState] = useState<State>(
-    sessionId ? { status: "loading" } : { status: "error", errorKind: "notFound" },
-  );
-
-  useEffect(() => {
-    if (!sessionId) return;
-    let cancelled = false;
-
-    (async () => {
-      try {
-        for (let i = 0; i < MAX_TRIES && !cancelled; i++) {
-          const data = await getUnlocked(sessionId);
-          if (cancelled) return;
-          if (data) return setState({ status: "done", data });
-          await new Promise((resolve) => setTimeout(resolve, POLL_MS));
-        }
-        if (!cancelled) setState({ status: "error", errorKind: "pending" });
-      } catch (err) {
-        if (!cancelled) setState({ status: "error", errorKind: getErrorKind(err) });
-      }
-    })();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [sessionId]);
+  const { t, lang } = useLocale();
+  const [saved, setSaved] = useState(getSaved);
 
   return (
     <div className="scroll">
-      <div className="page sm">
+      <div className="page xl">
         <section className="heading">
           <h1>{t.unlocked.title}</h1>
           <p>{t.unlocked.intro}</p>
         </section>
 
-        {state.status === "loading" && <p role="status">{t.unlocked.loading}</p>}
-        {state.status === "error" && <p role="alert">{t.errors[state.errorKind]}</p>}
-        {state.status === "done" && (
-          <div className="column sm">
-            <p>
-              <strong>{t.unlocked.description}:</strong> {state.data.description}
-            </p>
-            <p>
-              <strong>{t.unlocked.email}:</strong>{" "}
-              <a href={`mailto:${state.data.email}`}>{state.data.email}</a>
-            </p>
-            <p>
-              <strong>{t.unlocked.phone}:</strong>{" "}
-              <a href={`tel:${state.data.phone}`}>{state.data.phone}</a>
-            </p>
+        {saved.length === 0 ? (
+          <p>{t.unlocked.empty}</p>
+        ) : (
+          <div className="table-scroll">
+            <table className="unlocked-table">
+              <thead>
+                <tr>
+                  <th>{t.unlocked.colId}</th>
+                  <th>{t.unlocked.colDate}</th>
+                  <th>{t.unlocked.description}</th>
+                  <th>{t.unlocked.email}</th>
+                  <th>{t.unlocked.phone}</th>
+                  <th>{t.unlocked.colPrice}</th>
+                  <th>{t.unlocked.remove}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {saved.map((s) => (
+                  <tr key={s.id}>
+                    <td>{s.id}</td>
+                    <td>{formatDate(s.unlocked_at, lang)}</td>
+                    <td>{s.description}</td>
+                    <td><a href={`mailto:${s.email}`}>{s.email}</a></td>
+                    <td><a href={`tel:${s.phone}`}>{s.phone}</a></td>
+                    <td>{money(s.price, s.currency, lang)}</td>
+                    <td>
+                      <button
+                        type="button"
+                        className="destructive"
+                        onClick={() => setSaved(removeSaved(s.id))}
+                      >
+                        {t.unlocked.remove}
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
       </div>

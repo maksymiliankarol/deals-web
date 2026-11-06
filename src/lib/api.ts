@@ -42,6 +42,7 @@ export function getErrorKind(err: unknown): ErrorKind {
     if (err.status === 400) return "badRequest";
     if (err.status === 409) return "unavailable";
     if (err.status === 404) return "notFound";
+    if (err.status === 410) return "alreadyRevealed";
   }
   return "generic";
 }

@@ -57,7 +57,7 @@ export default function Sell() {
         <p>{t.sell.empty}</p>
       ) : (
         <div className="table-scroll">
-          <table>
+          <table className="sell-table">
             <thead>
               <tr>
                 <th>{t.sell.colNumber}</th>
@@ -130,6 +130,7 @@ export default function Sell() {
           </table>
         </div>
       )}
+      
       {unlockError && <p role="alert">{t.errors[unlockError]}</p>}
       <p>
         <Link to="/sell/new">{t.sell.add}</Link>

@@ -29,6 +29,7 @@ export default function Layout() {
             <NavLink className={navClass} to="/" end onClick={close}>{t.layout.home}</NavLink>
             <NavLink className={navClass} to="/buy" onClick={close}>{t.layout.buy}</NavLink>
             <NavLink className={navClass} to="/sell" onClick={close}>{t.layout.sell}</NavLink>
+            <NavLink className={navClass} to="/unlocked" onClick={close}>{t.layout.unlocked}</NavLink>
             <NavLink className={navClass} to="/settings" onClick={close}>{t.layout.settings}</NavLink>
           </div>
         </nav>

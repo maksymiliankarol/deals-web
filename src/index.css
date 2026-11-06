@@ -183,10 +183,6 @@ table {
   background: var(--grey-1);
 }
 
-th:nth-child(1) { width: 3rem; }
-th:nth-child(2) { width: 7rem; }
-th:nth-child(5) { width: 6rem; }
-
 td:first-child {
   text-align: right;
 }
@@ -445,25 +441,40 @@ button.destructive:hover {
   text-decoration-thickness: 2px;
 }
 
+/* Sell table: No. | Date | Description | Matches | Remove */
+.sell-table th:nth-child(1) { width: 3rem; }
+.sell-table th:nth-child(2) { width: 7rem; }
+.sell-table th:nth-child(5) { width: 6rem; }
+
+/* Unlocked table: ID | Date | Description | Email | Phone | Price | Remove */
+.unlocked-table th:nth-child(1) { width: 3rem; }
+.unlocked-table th:nth-child(2) { width: 7rem; }
+.unlocked-table th:nth-child(4) { width: 12rem; }
+.unlocked-table th:nth-child(5) { width: 9rem; }
+.unlocked-table th:nth-child(6) { width: 6rem; }
+.unlocked-table th:nth-child(7) { width: 6rem; }
+
+.unlocked-table td {
+  overflow-wrap: anywhere;
+}
+
+.unlocked-table td:nth-child(5) {
+  white-space: nowrap;
+}
+
+/* On narrow screens, fix a total width and let .table-scroll scroll sideways */
+@media (max-width: 48rem) {
+  .sell-table { width: 44rem; }       /* 3 + 7 + 14 + 14 + 6 */
+  .sell-table th:nth-child(3),
+  .sell-table th:nth-child(4) { width: 14rem; }
+
+  .unlocked-table { width: 57rem; }   /* 3 + 7 + 14 + 12 + 9 + 6 + 6 */
+  .unlocked-table th:nth-child(3) { width: 14rem; }
+}
+
 .table-scroll {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-}
-
-th:nth-child(1) { width: 3rem; }
-th:nth-child(2) { width: 7rem; }
-th:nth-child(5) { width: 6rem; }
-
-@media (max-width: 48rem) {
-  table {
-    width: 44rem; /* sum of the column widths below */
-  }
-
-  th:nth-child(1) { width: 3rem; }
-  th:nth-child(2) { width: 7rem; }
-  th:nth-child(3) { width: 14rem; }
-  th:nth-child(4) { width: 14rem; }
-  th:nth-child(5) { width: 6rem; }
 }
 
 /* Branding */

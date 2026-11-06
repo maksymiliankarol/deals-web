@@ -6,6 +6,7 @@ const pl: Messages = {
     home: "Strona główna", 
     buy: "Kupuję", 
     sell: "Sprzedaję", 
+    unlocked: "Odblokowane",
     settings: "Ustawienia",
     menu: "Menu",
     close: "Zamknij menu",
@@ -47,13 +48,26 @@ const pl: Messages = {
     save: "Zapisz",
     saveError: "Nie udało się zapisać oferty w tej przeglądarce.",
   },
-  unlocked: {
-    title: "Dane kontaktowe",
-    intro: "Oto dane kontaktowe kupującego. Zachowaj link do tej strony: pokaże te dane ponownie.",
+  success: {
+    title: "Płatność potwierdzona",
+    intro: "Te dane są pokazywane tylko raz. Kopia zapisuje się w tej przeglądarce, ale zapisz je też u siebie.",
     loading: "Potwierdzanie płatności…",
     description: "Zgłoszenie",
     email: "E-mail",
     phone: "Telefon",
+    viewSaved: "Zobacz wszystkie odblokowane kontakty",
+  },
+  unlocked: {
+    title: "Odblokowane kontakty",
+    intro: "Kontakty, które odblokowałeś, zapisane tylko w tej przeglądarce. Wyczyszczenie danych witryny je usuwa.",
+    empty: "Nic jeszcze nie odblokowano.",
+    description: "Zgłoszenie",
+    email: "E-mail",
+    phone: "Telefon",
+    colId: "ID",
+    colDate: "Data",
+    colPrice: "Cena",
+    remove: "Usuń",
   },
   settings: {
     title: "Ustawienia",
@@ -67,6 +81,7 @@ const pl: Messages = {
     unavailable: "To zgłoszenie jest już niedostępne.",
     notFound: "Nie znaleziono zakupu.",
     pending: "Płatność jest wciąż przetwarzana. Odśwież stronę za chwilę.",
+    alreadyRevealed: "Te dane zostały już wyświetlone i nie można ich otworzyć ponownie.",
   },
 };
 
