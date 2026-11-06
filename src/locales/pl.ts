@@ -36,6 +36,7 @@ const pl: Messages = {
     colMatches: "Dopasowania",
     colRemove: "Usuń",
     search: "Szukaj",
+    unlock: "Odblokuj",
     remove: "Usuń",
     searching: "Szukanie…",
     noMatches: "Brak dopasowań.",
@@ -46,6 +47,14 @@ const pl: Messages = {
     save: "Zapisz",
     saveError: "Nie udało się zapisać oferty w tej przeglądarce.",
   },
+  unlocked: {
+    title: "Dane kontaktowe",
+    intro: "Oto dane kontaktowe kupującego. Zachowaj link do tej strony: pokaże te dane ponownie.",
+    loading: "Potwierdzanie płatności…",
+    description: "Zgłoszenie",
+    email: "E-mail",
+    phone: "Telefon",
+  },
   settings: {
     title: "Ustawienia",
     intro: "Dostosuj aplikację.",
@@ -55,6 +64,9 @@ const pl: Messages = {
     tooManyRequests: "Zbyt wiele żądań. Odczekaj minutę.",
     badRequest: "Sprawdź swoje dane i spróbuj ponownie.",
     generic: "Coś poszło nie tak. Spróbuj ponownie.",
+    unavailable: "To zgłoszenie jest już niedostępne.",
+    notFound: "Nie znaleziono zakupu.",
+    pending: "Płatność jest wciąż przetwarzana. Odśwież stronę za chwilę.",
   },
 };
 

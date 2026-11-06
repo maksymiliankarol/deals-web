@@ -34,6 +34,7 @@ const en = {
     colMatches: "Matches",
     colRemove: "Remove",
     search: "Search",
+    unlock: "Unlock",
     remove: "Remove",
     searching: "Searching…",
     noMatches: "No matches yet.",
@@ -44,6 +45,14 @@ const en = {
     save: "Save",
     saveError: "Could not save the listing in this browser.",
   },
+  unlocked: {
+    title: "Contact details",
+    intro: "Here is how to reach the buyer. Keep the link to this page: it shows these details again.",
+    loading: "Confirming your payment…",
+    description: "Request",
+    email: "Email",
+    phone: "Phone",
+  },
   settings: {
     title: "Settings",
     intro: "Customize this app.",
@@ -53,6 +62,9 @@ const en = {
     tooManyRequests: "Too many requests. Please wait a minute.",
     badRequest: "Please check your details and try again.",
     generic: "Something went wrong. Please try again.",
+    unavailable: "This request is no longer available.",
+    notFound: "Purchase not found.",
+    pending: "Your payment is still being processed. Refresh this page in a moment.",
   },
 };
 

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router";
-import { getErrorKind, searchBuys, type ErrorKind, type Match } from "../lib/api";
+import { getErrorKind, searchBuys, startUnlock, type ErrorKind, type Match } from "../lib/api";
 import { getListings, removeListing } from "../lib/listings";
 import { useLocale } from "../locales";
 import Truncate from "../components/truncate";
@@ -15,6 +15,8 @@ export default function Sell() {
   const { t, lang } = useLocale();
   const [listings, setListings] = useState(getListings);
   const [search, setSearch] = useState<Search | null>(null);
+  const [unlockingId, setUnlockingId] = useState<number | null>(null);
+  const [unlockError, setUnlockError] = useState<ErrorKind | null>(null);
 
   async function findMatches(id: string, text: string) {
     setSearch({ listingId: id, status: "loading" });
@@ -23,6 +25,17 @@ export default function Sell() {
       setSearch({ listingId: id, status: "done", matches });
     } catch (err) {
       setSearch({ listingId: id, status: "error", errorKind: getErrorKind(err) });
+    }
+  }
+
+  async function unlock(id: number) {
+    setUnlockingId(id);
+    setUnlockError(null);
+    try {
+      window.location.assign(await startUnlock(id));
+    } catch (err) {
+      setUnlockError(getErrorKind(err));
+      setUnlockingId(null);
     }
   }
 
@@ -86,6 +99,14 @@ export default function Sell() {
                             {search.matches.map((m) => (
                               <li className="link" key={m.id}>
                                 {m.description} ({formatDate(m.created_at, lang)})
+                                <button
+                                  type="button"
+                                  className="success"
+                                  disabled={unlockingId !== null}
+                                  onClick={() => unlock(m.id)}
+                                >
+                                  {t.sell.unlock}
+                                </button>
                               </li>
                             ))}
                           </ol>
@@ -109,6 +130,7 @@ export default function Sell() {
           </table>
         </div>
       )}
+      {unlockError && <p role="alert">{t.errors[unlockError]}</p>}
       <p>
         <Link to="/sell/new">{t.sell.add}</Link>
       </p>
