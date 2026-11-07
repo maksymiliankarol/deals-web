@@ -55,6 +55,12 @@ const en = {
     phone: "Phone",
     viewSaved: "See all unlocked contacts",
   },
+  cliSuccess: {
+    title: "Payment received",
+    intro: "Go back to your terminal. Run 'deals unlocked' to see the contact details.",
+    cancelledTitle: "Payment cancelled",
+    cancelledIntro: "Nothing was charged. Go back to your terminal.",
+  },
   unlocked: {
     title: "Unlocked contacts",
     intro: "Contacts you unlocked, saved in this browser only. Clearing site data deletes them.",

@@ -290,6 +290,10 @@ header {
     background: var(--grey-4);
   }
 
+  .menu-button:hover {
+    background: var(--grey-5);
+  }
+
   header nav {
     display: none;
   }

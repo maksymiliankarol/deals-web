@@ -57,6 +57,12 @@ const pl: Messages = {
     phone: "Telefon",
     viewSaved: "Zobacz wszystkie odblokowane kontakty",
   },
+  cliSuccess: {
+    title: "Płatność otrzymana",
+    intro: "Wróć do terminala. Uruchom 'deals unlocked', aby zobaczyć dane kontaktowe.",
+    cancelledTitle: "Płatność anulowana",
+    cancelledIntro: "Nic nie pobrano. Wróć do terminala.",
+  },
   unlocked: {
     title: "Odblokowane kontakty",
     intro: "Kontakty, które odblokowałeś, zapisane tylko w tej przeglądarce. Wyczyszczenie danych witryny je usuwa.",

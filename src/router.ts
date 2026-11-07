@@ -7,6 +7,7 @@ import SellNew from "./pages/sell-new";
 import Settings from "./pages/settings";
 import Unlocked from "./pages/unlocked";
 import Success from "./pages/success";
+import CliSuccess from "./pages/cli-success";
 
 export const router = createBrowserRouter([
   {
@@ -19,6 +20,7 @@ export const router = createBrowserRouter([
       { path: "sell/new", Component: SellNew },
       { path: "settings", Component: Settings },
       { path: "success", Component: Success },
+      { path: "cli-success", Component: CliSuccess },
       { path: "unlocked", Component: Unlocked }
     ],
   },
