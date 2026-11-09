@@ -86,6 +86,8 @@ const en = {
     notFound: "Purchase not found.",
     pending: "Your payment is still being processed. Refresh this page in a moment.",
     alreadyRevealed: "These details were already shown and can't be opened again.",
+    contactDetails: "Please remove contact details (email, phone, links, social media) from the description. They are shared only after payment.",
+    tooManyReservations: "You have too many open reservations. Pay for one or wait about 35 minutes for them to expire.",
   },
 };
 

@@ -88,6 +88,8 @@ const pl: Messages = {
     notFound: "Nie znaleziono zakupu.",
     pending: "Płatność jest wciąż przetwarzana. Odśwież stronę za chwilę.",
     alreadyRevealed: "Te dane zostały już wyświetlone i nie można ich otworzyć ponownie.",
+    contactDetails: "Usuń z opisu dane kontaktowe (e-mail, telefon, linki, media społecznościowe). Są udostępniane dopiero po opłaceniu.",
+    tooManyReservations: "Masz zbyt wiele otwartych rezerwacji. Opłać jedną lub poczekaj około 35 minut, aż wygasną.",
   },
 };
 
