@@ -277,9 +277,15 @@ header {
   gap: 1rem;
 }
 
+
 .menu-button,
 .menu-header {
   display: none;
+}
+
+.menu-button:hover:not(:disabled),
+.menu-close:hover:not(:disabled) {
+  background: var(--grey-5);
 }
 
 @media (max-width: 768px) {
@@ -288,10 +294,6 @@ header {
     margin-left: auto;
     color: var(--black);
     background: var(--grey-4);
-  }
-
-  .menu-button:hover {
-    background: var(--grey-5);
   }
 
   header nav {

@@ -11,9 +11,16 @@ const pl: Messages = {
     menu: "Menu",
     close: "Zamknij menu",
   },
-  home: { 
-    title: "Witaj w Deals", 
-    intro: "TODO"
+  home: {
+    title: "Witaj w Deals",
+    intro: "Szukasz produktu lub usługi?",
+    buyLink: "Dodaj je tutaj.",
+    introPartTwo: "Coś sprzedajesz?",
+    sellLink: "Dodaj swoją ofertę,",
+    introPartThree: "aby znaleźć pasujących kupujących.",
+    contact: "Kontakt",
+    terms: "Regulamin",
+    privacy: "Polityka prywatności",
   },
   buy: {
     title: "Kupuję",

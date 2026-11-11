@@ -9,9 +9,16 @@ const en = {
     menu: "Menu",
     close: "Close menu",
   },  
-  home: { 
-    title: "Welcome at Deals", 
-    intro: "TODO" 
+  home: {
+    title: "Welcome to Deals",
+    intro: "Looking for a product or service?",
+    buyLink: "Describe it here.",
+    introPartTwo: "Selling something?",
+    sellLink: "Add your offer",
+    introPartThree: "to find matches.",
+    contact: "Contact",
+    terms: "Terms of Service",
+    privacy: "Privacy Policy",
   },
   buy: {
     title: "Buy",
