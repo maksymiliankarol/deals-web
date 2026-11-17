@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="32" height="32" aria-hidden="true">
+  <polygon points="50,50 50,2 91.5692,26" fill="#ff0000"/>
+  <polygon points="50,50 91.5692,26 91.5692,74" fill="#ff00ff"/>
+  <polygon points="50,50 91.5692,74 50,98" fill="#0000ff"/>
+  <polygon points="50,50 50,98 8.4308,74" fill="#00ffff"/>
+  <polygon points="50,50 8.4308,74 8.4308,26" fill="#00ff00"/>
+  <polygon points="50,50 8.4308,26 50,2" fill="#ffff00"/>
+</svg>

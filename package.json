@@ -1,0 +1,11 @@
+{
+  "name": "deals-web",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev --port 5173",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4.162.0"
+  }
+}

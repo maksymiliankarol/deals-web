@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="robots" content="noindex">
+  <title>Deals CLI: Payment | Metalogrom</title>
+  <link rel="stylesheet" href="/style/index.css">
+</head>
+<body>
+  <main>
+    <section id="success" class="page width-sm column">
+      <a href="https://metalogrom.com" target="_blank" rel="noopener">
+        <img src="/logo.svg" alt="Metalogrom" class="logo" width="36">
+      </a>
+      <h1>Payment received!</h1>
+      <p>Go back to your terminal. The contact details will appear there in a few seconds.</p>
+      <p>They are shown only once and saved on your computer. To see them again, run:</p>
+      <pre><code>deals unlocked</code></pre>
+      <p>You can close this page now.</p>
+    </section>
+
+    <section id="cancel" class="page width-sm column" hidden>
+      <a href="https://metalogrom.com" target="_blank" rel="noopener">
+        <img src="/logo.svg" alt="Metalogrom" class="logo" width="36">
+      </a>      
+      <h1>Payment cancelled</h1>
+      <p>You were not charged. Press Ctrl+C in your terminal to stop waiting.</p>
+      <p>To try again, run <code>deals unlock &lt;id&gt;</code>.</p>
+      <p>You can close this page now.</p>
+    </section>
+  </main>
+  <script src="/script.js"></script>
+</body>
+</html>

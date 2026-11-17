@@ -1,0 +1,83 @@
+:root {
+  --background: #fff;
+  --foreground: #000;
+  --border: #c2c2c2;
+  --link: #00f;
+  --error: #f00;
+
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 2rem;
+
+  --header-height: 3.5rem;
+}
+
+/* HTML */
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+h1, h2, h3, strong {
+  font-weight: 600;
+}
+
+h1 {
+  font-size: 1.75rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+}
+
+h3 {
+  font-size: 1.25rem;
+}
+
+code, pre {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+}
+
+/* Block code */
+pre {
+  background: var(--foreground);
+  color: var(--background);
+  padding: var(--space-sm) var(--space-md);
+  overflow-x: auto;
+}
+
+/* Inline code */
+:not(pre) > code {
+  background: var(--code-foreground);
+  border: 1px solid var(--border);
+  padding: 0.05rem 0.25rem;
+}
+
+/* Custom */
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.page {
+  margin-inline: auto;
+  padding: var(--space-md);
+  padding-top: 3.5rem;
+}
+
+.width-sm  { max-width: 30rem; }
+.width-md  { max-width: 40rem; }
+.width-lg  { max-width: 60rem; }
+.width-xl  { max-width: 80rem; }
+
+.gap-sm { gap: var(--space-sm); }
+.gap-md { gap: var(--space-md); }
+.gap-lg { gap: var(--space-lg); }

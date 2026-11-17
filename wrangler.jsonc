@@ -1,0 +1,11 @@
+{
+  "name": "deals-web",
+  "compatibility_date": "2026-11-17",
+  "assets": { 
+    "directory": "./public" 
+  },
+  "routes": [{ 
+    "pattern": "deals.metalogrom.com", 
+    "custom_domain": true 
+  }]
+}
